@@ -1,0 +1,47 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import '~@angular/material/theming';
+
+$custom-typography: mat-typography-config($font-family: 'Exo');
+
+@include mat-core($custom-typography);
+
+body {
+    background-color: #000;
+    color: #fff;
+    margin: 0;
+
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+
+    app-root * {
+        font-family: 'Exo', sans-serif;
+    }
+}
+
+a:hover {
+    color: #00aaff;
+    text-decoration: underline;
+}
+
+a {
+    color: #66aaff;
+    text-decoration: none;
+    background-color: transparent;
+    -webkit-text-decoration-skip: objects;
+}
+
+.container {
+    width: 820px;
+    margin: 0 auto;
+    overflow: auto;
+
+    .container-inner {
+        padding: 10px;
+        height: auto !important;
+    }
+}
+
+.display-none{
+	display:none !important;
+}

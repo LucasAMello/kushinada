@@ -1,0 +1,170 @@
+<div class="container">
+    <div class="container-inner">
+        <h2>Guides</h2>
+        <p>Strategies on this site are compiled here for convenience only. Credit for strategies goes to the creators.</p>
+        <form [formGroup]="searchForm">
+            <div class="form p-fluid search-bar">
+                <div class="p-field p-grid">
+                    <div class="p-col-9">
+                        <span class="p-input-icon-right">
+                            <i class="pi pi-search" style="cursor: pointer;" (click)="search()"></i>
+                            <input pInputText placeholder="Search" type="text" formControlName="title" (keydown.enter)="search()" class="p-inputtext p-component">
+                        </span>
+                    </div>
+                    <div class="p-col-3">
+                        <span *ngIf="!advancedSearch" class="advanced-search" (click)="advancedSearch = true">
+                            <i class="material-icons" style="font-size: 14px;">expand_more</i>
+                            Advanced Search
+                        </span>
+                        <span *ngIf="advancedSearch" class="advanced-search" (click)="advancedSearch = false">
+                            <i class="material-icons" style="font-size: 14px;">expand_less</i>
+                            Advanced Search
+                        </span>
+                    </div>
+                </div>
+                <ng-container *ngIf="advancedSearch">
+                    <div class="p-field p-grid">
+                        <div class="p-col-1 label">Leader</div>
+                        <div class="p-col-5">
+                            <p-autoComplete field="label" [minLength]="2" formControlName="leader" [suggestions]="suggestions"
+                                (completeMethod)="searchCard($event)" (keydown.enter)="search()" (onSelect)=search()></p-autoComplete>
+                        </div>
+                        <div class="p-col-1 label">Order</div>
+                        <div class="p-col-5">
+                            <p-dropdown [options]="orderBy" formControlName="order" (onChange)="search()" appendTo="body"></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="p-field p-grid">
+                        <div class="p-col-4">
+                            <div class="p-field-checkbox">
+                                <p-checkbox inputId="video" [formControl]="searchForm.controls['withVideo']" (onChange)="search()"></p-checkbox>
+                                <label for="video">Only guides with video</label>
+                            </div>
+                        </div>
+                        <div class="p-col-5">
+                            <div class="p-field-checkbox">
+                                <p-checkbox inputId="formation" [formControl]="searchForm.controls['withFormation']" (onChange)="search()"></p-checkbox>
+                                <label for="formation">Only guides with team formation</label>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </form>
+        <ng-container *ngIf="guides">
+            <div *ngIf="guides.length == 0" style="margin-top: 50px; text-align: center;">
+                No results...  :(
+            </div>
+            <div *ngFor="let guide of guides" class="guide">
+                <div *ngIf="admin" class="action-buttons">
+                    <button *ngIf="guide.awaitingApproval" type="button" pButton icon="pi pi-check" label="Approve" (click)="approve(guide._id)"></button>
+                    <button type="button" pButton icon="pi pi-trash" label="Delete" (click)="delete(guide)"></button>
+                </div>
+                <div *ngIf="showMine" class="action-buttons">
+                    <button type="button" pButton icon="pi pi-trash" label="Delete" (click)="delete(guide)"></button>
+                </div>
+                <h2 class="title">{{ guide.title }}</h2>
+                <div class="video">
+                    <div *ngIf="guide.videoId" class="youtube-player">
+                        <iframe [src]="'https://www.youtube.com/embed/' + guide.videoId | safe" frameborder="0" allowfullscreen="1"></iframe>
+                    </div>
+                    <div *ngIf="!guide.videoId" class="youtube-player" style="text-align: center; line-height: 260px;">
+                        No video
+                    </div>
+                </div>
+
+                <div class="data">
+                    <ul>
+                        <li class="leader"><strong>Leader:</strong></li>
+                        <li class="data-card"><app-card-small [cardId]="guide.leaderId"></app-card-small></li>
+                        <li class="subs"><strong>Subs:</strong></li>
+                        <li class="data-card"><app-card-small *ngIf="guide.sub1Id" [cardId]="guide.sub1Id"></app-card-small></li>
+                        <li class="data-card"><app-card-small *ngIf="guide.sub2Id" [cardId]="guide.sub2Id"></app-card-small></li>
+                        <li class="data-card"><app-card-small *ngIf="guide.sub3Id" [cardId]="guide.sub3Id"></app-card-small></li>
+                        <li class="data-card"><app-card-small *ngIf="guide.sub4Id" [cardId]="guide.sub4Id"></app-card-small></li>
+                        <li class="helper"><strong>Helper:</strong></li>
+                        <li class="data-card"><app-card-small [cardId]="guide.helperId"></app-card-small></li>
+                    </ul>
+                    <ul style="margin-top: 20px;">
+                        <li><strong>Team Badge:</strong> {{ badges[guide.badge ? guide.badge : 0].name }}</li>
+                    </ul>
+                </div>
+                <span *ngIf="guide.user" class="credits">Submitted by {{ guide.user.username }} on {{ guide.createdAt }}</span>
+                <span *ngIf="!guide.user" class="credits">Submitted on {{ guide.createdAt }}</span>
+                <span class="likes">
+                    <i *ngIf="user && guide.likes.indexOf(user._id) != -1" class="material-icons" style="font-size: 14px;" (click)="like(guide)">thumb_up</i>
+                    <i *ngIf="!user || guide.likes.indexOf(user._id) == -1" class="material-icons-outlined" style="font-size: 14px;" (click)="like(guide)">thumb_up</i>
+                    {{ guide.likes.length }}
+                </span>
+                <span class="dislikes">
+                    <i *ngIf="user && guide.dislikes.indexOf(user._id) != -1" class="material-icons" style="font-size: 14px;" (click)="dislike(guide)">thumb_down</i>
+                    <i *ngIf="!user || guide.dislikes.indexOf(user._id) == -1" class="material-icons-outlined" style="font-size: 14px;" (click)="dislike(guide)">thumb_down</i>
+                    {{ guide.dislikes.length }}
+                </span>
+                <span class="report" title="Report">
+                    <i class="material-icons-outlined" style="font-size: 18px;" (click)="report(guide._id)">error</i>
+                    <span *ngIf="admin">{{ guide.reports.length }}</span>
+                </span>
+                <ng-container *ngIf="guide.description || guide.padDashFormation">
+                    <span *ngIf="!guide.showMore" class="show-more" (click)="guide.showMore = true">
+                        <i class="material-icons" style="font-size: 14px;">expand_more</i>
+                        Show more
+                    </span>
+                    <span *ngIf="guide.showMore" class="show-more" (click)="guide.showMore = false">
+                        <i class="material-icons" style="font-size: 14px;">expand_less</i>
+                        Show less
+                    </span>
+                </ng-container>
+
+                <div *ngIf="guide.showMore" class="more-info">
+                    <hr />
+                    <ng-container *ngIf="guide.description">
+                        <div class="description">
+                            {{ guide.description }}
+                        </div>
+                        <hr />
+                    </ng-container>
+                    <div *ngIf="guide.parsedTeamData" class="paddash">
+                        <div class="team-badge">
+                            <div class="badge">
+                                <span [style.backgroundPositionY]="(guide.parsedTeamData.badge ? guide.parsedTeamData.badge : 0) * -30 + 'px'"></span>
+                            </div>
+                            <div class="pad-dash-link">
+                                <a [href]="'https://mapaler.github.io/PADDashFormation/solo.html?s=en&d=' + guide.padDashFormation" target="_blank">
+                                    >> Click here for full team information <<
+                                </a>
+                            </div>
+                        </div>
+                        <div class="team-box">
+                            <ul class="team-assist">
+                                <ng-container *ngFor="let assist of guide.parsedTeamData.assists">
+                                    <li *ngIf="!assist" class="member null"><a class="monster"></a></li>
+                                    <li *ngIf="assist" class="member"><app-card [cardId]="assist[0]"></app-card></li>
+                                </ng-container>
+                            </ul>
+                            <ul class="team-latents">
+                                <li *ngFor="let latent of guide.parsedTeamData.latents" class="latents">
+                                    <ul class="latent-ul">
+                                        <ng-container *ngFor="let l of latent">
+                                            <li class="latent-icon"><span [ngStyle]="getLatentStyle(l)"></span></li>
+                                            <li *ngIf="isSixSlot(l)" class="latent-icon display-none"><span></span></li>
+                                        </ng-container>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <ul class="team-members">
+                                <ng-container *ngFor="let member of guide.parsedTeamData.team">
+                                    <li *ngIf="!member" class="member null"><a class="monster"></a></li>
+                                    <li *ngIf="member" class="member"><app-card [cardId]="member[0]" [superAwoken]="member[5]"></app-card></li>
+                                </ng-container>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="guides.length == 50" style="text-align: center;">
+                Showing first 50 records
+            </div>
+        </ng-container>
+    </div>
+</div>

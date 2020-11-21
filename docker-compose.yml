@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  app:
+    build: ./
+    image: kushinada
+    ports:
+      - "4041:4040"
+    environment:
+      NODE_ENV: production
+      SERVER_PORT: 4040
+      JWT_SECRET: 35398d59-7c14-4b82-9339-3d3915b65253
+      MONGO_HOST: mongodb://mongo/odmp
+    restart: always
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:3.6

@@ -1,0 +1,6 @@
+<a target="_blank" [title]="'#' + card.id + ' - ' + card.name" [href]="'http://www.puzzledragonx.com/en/monster.asp?n=' + card.id">
+    <div class="monster" [ngStyle]="{ backgroundImage: 'url(/assets/images/CARDS_' + card.picId + '.PNG)', backgroundPosition: card.picX + 'px ' + card.picY + 'px' }"></div>
+    <div class="property" [ngStyle]="{ backgroundPositionX: card.attr * -25 + 'px' }"></div>
+    <div class="subproperty" [ngStyle]="{ backgroundPositionX: card.subAttr * -25 + 'px' }"></div>
+    <div class="card-name">#{{ card.id }} - {{ card.name }}</div>
+</a>

@@ -1,0 +1,19 @@
+<header>
+    <mat-toolbar color="primary" style="height: 48px; min-width: 820px;">
+        <a class="links side" routerLink="/">Home</a>
+        <a class="links side" routerLink="/guide">Guides</a>
+        <a class="links side" routerLink="/submit">Submit</a>
+        <span class="example-spacer"></span>
+        <a *ngIf="!user" class="links side" routerLink="/auth/login">Login</a>
+        <a *ngIf="user" class="links side" [matMenuTriggerFor]="menu">
+            <mat-icon style="line-height: 22px;">account_circle</mat-icon>
+            {{ user.username }}
+        </a>
+        <mat-menu #menu="matMenu" xPosition="before">
+            <button mat-menu-item *ngIf="user?.isAdmin" routerLink="/admin">Admin</button>
+            <button mat-menu-item routerLink="/guide" [queryParams]="{ showMine: true }">Submissions</button>
+            <!-- <button mat-menu-item>Settings</button> -->
+            <button mat-menu-item (click)="logout()">Logout</button>
+        </mat-menu>
+    </mat-toolbar>
+</header>

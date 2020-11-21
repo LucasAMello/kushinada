@@ -1,0 +1,17 @@
+.title {
+    margin-bottom: 10px;;
+}
+
+::ng-deep {
+    .p-autocomplete-item {
+        padding: 4px !important;
+    }
+
+    .p-inputtext {
+        padding: 4px !important;
+    }
+}
+
+.label {
+    line-height: 30px;
+}
