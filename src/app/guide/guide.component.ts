@@ -46,7 +46,7 @@ export class GuideComponent implements OnInit {
             withFormation: new FormControl(false)
         });
 
-        this.cardNames = cardData.map(d => ({ label: `#${d[0]} - ${d[1]}`, value: d[0] }));
+        this.cardNames = cardData.map(d => ({ label: `#${d[0]} - ${d[1]}`, name: d[1], value: d[0] }));
 
         // this.search();
 
@@ -233,8 +233,16 @@ export class GuideComponent implements OnInit {
     }
 
     searchCard(event) {
+        const query = event.query.toLowerCase();
+        const results = [];
+        results.push(...this.cardNames.filter(c => c.name.toLowerCase() === query).map(c => ({ data: c, level: 0 })));
+        results.push(...this.cardNames.filter(c => c.value + '' === query).map(c => ({ data: c, level: 0 })));
+        results.push(...this.cardNames.filter(c => c.label.toLowerCase().indexOf(query) >= 0).map(c =>
+            ({ data: c, level: c.label.toLowerCase().indexOf(query) })));
         const regularExpression = new RegExp(event.query.toLowerCase().split(' ').join('.*'), 'i');
-        this.suggestions = this.cardNames.filter(c => regularExpression.test(c.label.toLowerCase()));
+        results.push(...this.cardNames.filter(c => regularExpression.test(c.label.toLowerCase())).map(c => ({ data: c, level: 1000 })));
+
+        this.suggestions = [...new Set(results.sort((a, b) => a.level - b.level).map(d => d.data))];
     }
 
 }

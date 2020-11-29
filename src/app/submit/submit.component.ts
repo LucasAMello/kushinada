@@ -94,11 +94,12 @@ export class SubmitComponent implements OnInit {
     searchCard(event) {
         const query = event.query.toLowerCase();
         const results = [];
-        results.push(...this.cardNames.filter(c => c.name.toLowerCase() === query).map(d => ({ data: d, level: 0 })));
-        results.push(...this.cardNames.filter(c => c.value + '' === query).map(d => ({ data: d, level: 0 })));
-        results.push(...this.cardNames.filter(c => c.label.toLowerCase().indexOf(query) >= 0).map(d => ({ data: d, level: 1 })));
+        results.push(...this.cardNames.filter(c => c.name.toLowerCase() === query).map(c => ({ data: c, level: 0 })));
+        results.push(...this.cardNames.filter(c => c.value + '' === query).map(c => ({ data: c, level: 0 })));
+        results.push(...this.cardNames.filter(c => c.label.toLowerCase().indexOf(query) >= 0).map(c =>
+            ({ data: c, level: c.label.toLowerCase().indexOf(query) })));
         const regularExpression = new RegExp(event.query.toLowerCase().split(' ').join('.*'), 'i');
-        results.push(...this.cardNames.filter(c => regularExpression.test(c.label.toLowerCase())).map(d => ({ data: d, level: 2 })));
+        results.push(...this.cardNames.filter(c => regularExpression.test(c.label.toLowerCase())).map(c => ({ data: c, level: 1000 })));
 
         this.suggestions = [...new Set(results.sort((a, b) => a.level - b.level).map(d => d.data))];
     }
