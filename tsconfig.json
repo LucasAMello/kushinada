@@ -26,6 +26,7 @@
         "strictPropertyInitialization": false,
         "noImplicitAny": false,
         "strictNullChecks": false,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true
     }
 }
