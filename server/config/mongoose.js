@@ -16,7 +16,7 @@ mongoose.connect(mongoUri, {
         useUnifiedTopology: true,
         retryWrites: false
     })
-    .then(() => console.log('Connection successful'))
+    .then(() => console.log('Connection to DB successful'))
     .catch((err) => console.error(err));
 
 // print mongoose logs in dev env

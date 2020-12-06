@@ -25,6 +25,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
     exports: [
@@ -53,7 +54,8 @@ import { CheckboxModule } from 'primeng/checkbox';
         AutoCompleteModule,
         ButtonModule,
         InputTextareaModule,
-        CheckboxModule
+        CheckboxModule,
+        DialogModule
     ]
 })
 export class SharedModule { }

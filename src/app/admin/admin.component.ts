@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-admin',
@@ -6,8 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminComponent implements OnInit {
 
-    constructor() { }
+    guideId: string;
+
+    constructor(private route: ActivatedRoute) { }
 
     public ngOnInit() {
+        this.route.queryParams.subscribe(params => {
+            this.guideId = params['id'];
+        });
     }
 }

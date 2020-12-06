@@ -16,6 +16,7 @@ import { ActivatedRoute } from '@angular/router';
 export class GuideComponent implements OnInit {
 
     @Input() admin = false;
+    @Input() guideId = '';
 
     user: User;
     showMine = false;
@@ -30,7 +31,12 @@ export class GuideComponent implements OnInit {
     cardNames: any[];
     advancedSearch = false;
     suggestions: any;
-    orderBy = [{ label: 'Most Recent', value: 'recent' }, { label: 'Most Likes', value: 'likes' }];
+    orderOptions = [{ label: 'Most Recent', value: 'recent' }, { label: 'Most Likes', value: 'likes' }];
+
+    displayReport = false;
+    guideReportId: any;
+    reportOptions = [{ label: 'Not PaD related', value: 'notPad' }, { label: 'Offensive', value: 'offensive' }];
+    reportReason: any;
 
     constructor(private formBuilder: FormBuilder, private guideService: GuideService, private authService: AuthService,
             private snackBar: MatSnackBar, private route: ActivatedRoute) { }
@@ -48,11 +54,9 @@ export class GuideComponent implements OnInit {
 
         this.cardNames = cardData.map(d => ({ label: `#${d[0]} - ${d[1]}`, name: d[1], value: d[0] }));
 
-        // this.search();
-
         this.route.queryParams.subscribe(params => {
             this.showMine = params['showMine'] === 'true';
-            this.search();
+            this.search(this.guideId);
         });
     }
 
@@ -96,22 +100,29 @@ export class GuideComponent implements OnInit {
         }
     }
 
-    report(id) {
+    showReport(id) {
         if (!this.user) {
             this.snackBar.open('You need to be logged to report a guide', 'Close', {
                 duration: 5000,
                 verticalPosition: 'top'
             });
         } else {
-            this.guideService.report(id, this.user._id).subscribe(res => {
-                if (res.success) {
-                    this.snackBar.open('Report sent', 'Close', {
-                        duration: 5000,
-                        verticalPosition: 'top'
-                    });
-                }
-            });
+            this.guideReportId = id;
+            this.displayReport = true;
         }
+    }
+
+    report() {
+        this.guideService.report(this.guideReportId, this.user._id).subscribe(res => {
+            if (res.success) {
+                this.snackBar.open('Report sent', 'Close', {
+                    duration: 5000,
+                    verticalPosition: 'top'
+                });
+            }
+
+            this.displayReport = false;
+        });
     }
 
     approve(id) {
@@ -176,60 +187,68 @@ export class GuideComponent implements OnInit {
         return [13, 14, 15, 37, 38, 39, 40, 41].indexOf(l) !== -1;
     }
 
-    search() {
-        const formValues = this.searchForm.value;
-        const search: any = {
-            leaderId: formValues.leader ? formValues.leader.value : null,
-            title: formValues.title,
-            withVideo: formValues.withVideo ? formValues.withVideo.length > 0 : false,
-            withFormation: formValues.withFormation ? formValues.withFormation.length > 0 : false,
-            order: formValues.order,
-            showMine: this.showMine
-        };
+    search(id?) {
+        if (id) {
+            this.guideService.get(id).subscribe(res => {
+                this.guides = res;
+                this.guides.forEach(g => this.parseGuide(g));
+            });
+        } else {
+            const formValues = this.searchForm.value;
+            const search: any = {
+                leaderId: formValues.leader ? formValues.leader.value : null,
+                title: formValues.title,
+                withVideo: formValues.withVideo ? formValues.withVideo.length > 0 : false,
+                withFormation: formValues.withFormation ? formValues.withFormation.length > 0 : false,
+                order: formValues.order,
+                showMine: this.showMine
+            };
 
-        if (!this.admin) {
-            search.awaitingApproval = false;
+            if (!this.admin) {
+                search.awaitingApproval = false;
+            }
+
+            this.guideService.getAll(search).subscribe(res => {
+                this.guides = res;
+                this.guides.forEach(g => this.parseGuide(g));
+            });
         }
+    }
 
-        this.guideService.getAll(search).subscribe(res => {
-            this.guides = res;
+    parseGuide(g) {
+        g.showMore = false;
+        g.createdAt = new Date(g.createdAt).toLocaleString('en-GB', { timeZone: 'UTC' });
 
-            this.guides.forEach(g => {
-                g.showMore = false;
-                g.createdAt = new Date(g.createdAt).toLocaleString('en-GB', { timeZone: 'UTC' });
-
-                if (g.padDashFormation) {
-                    const parsed = JSON.parse(g.padDashFormation);
-                    const team = [];
-                    const latents = [];
-                    parsed.f[0][0].forEach(t => {
-                        if (t) {
-                            const p = Math.ceil((t[0] - 1) / 100.0);
-                            const x = Math.floor((t[0] - 1) % 10);
-                            const y = Math.floor(((t[0] - 1) % 100) / 10.0);
-                            team.push(cardData[t[0]].concat(t[5], p, x, y));
-                            latents.push(t[4]);
-                        } else {
-                            team.push(null);
-                            latents.push(null);
-                        }
-                    });
-
-                    const assists = parsed.f[0][1].map(t => {
-                        if (t) {
-                            const p = Math.ceil((t[0] - 1) / 100.0);
-                            const x = Math.floor((t[0] - 1) % 10);
-                            const y = Math.floor(((t[0] - 1) % 100) / 10.0);
-                            return cardData[t[0]].concat(p, x, y);
-                        } else {
-                            return null;
-                        }
-                    });
-
-                    g.parsedTeamData = { team, assists, latents, badge: parsed.f[0][2] };
+        if (g.padDashFormation) {
+            const parsed = JSON.parse(g.padDashFormation);
+            const team = [];
+            const latents = [];
+            parsed.f[0][0].forEach(t => {
+                if (t) {
+                    const p = Math.ceil((t[0] - 1) / 100.0);
+                    const x = Math.floor((t[0] - 1) % 10);
+                    const y = Math.floor(((t[0] - 1) % 100) / 10.0);
+                    team.push(cardData[t[0]].concat(t[5], p, x, y));
+                    latents.push(t[4]);
+                } else {
+                    team.push(null);
+                    latents.push(null);
                 }
             });
-        });
+
+            const assists = parsed.f[0][1].map(t => {
+                if (t) {
+                    const p = Math.ceil((t[0] - 1) / 100.0);
+                    const x = Math.floor((t[0] - 1) % 10);
+                    const y = Math.floor(((t[0] - 1) % 100) / 10.0);
+                    return cardData[t[0]].concat(p, x, y);
+                } else {
+                    return null;
+                }
+            });
+
+            g.parsedTeamData = { team, assists, latents, badge: parsed.f[0][2] };
+        }
     }
 
     searchCard(event) {

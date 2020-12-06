@@ -31,7 +31,7 @@
                         </div>
                         <div class="p-col-1 label">Order</div>
                         <div class="p-col-5">
-                            <p-dropdown [options]="orderBy" formControlName="order" (onChange)="search()" appendTo="body"></p-dropdown>
+                            <p-dropdown [options]="orderOptions" formControlName="order" (onChange)="search()" appendTo="body"></p-dropdown>
                         </div>
                     </div>
                     <div class="p-field p-grid">
@@ -102,7 +102,7 @@
                     {{ guide.dislikes.length }}
                 </span>
                 <span class="report" title="Report">
-                    <i class="material-icons-outlined" style="font-size: 18px;" (click)="report(guide._id)">error</i>
+                    <i class="material-icons-outlined" style="font-size: 18px;" (click)="showReport(guide._id)">error</i>
                     <span *ngIf="admin">{{ guide.reports.length }}</span>
                 </span>
                 <ng-container *ngIf="guide.description || guide.padDashFormation">
@@ -168,3 +168,13 @@
         </ng-container>
     </div>
 </div>
+<p-dialog header="Report" [(visible)]="displayReport" [modal]="true" [draggable]="false" [resizable]="false" [style]="{width: '25vw'}">
+    <div class="p-grid">
+        <div class="p-col-3 label">Reason:</div>
+        <div class="p-col-9"><p-dropdown [options]="reportOptions" [(ngModel)]="reportReason" appendTo="body"></p-dropdown></div>
+    </div>
+    <p-footer>
+        <p-button icon="pi pi-times" (click)="displayReport=false" label="Cancel" styleClass="p-button-text"></p-button>
+        <p-button icon="pi pi-check" (click)="report()" label="Report" styleClass="p-button-text"></p-button>
+    </p-footer>
+</p-dialog>

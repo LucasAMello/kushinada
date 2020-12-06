@@ -3,6 +3,8 @@ const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const Guide = require('../models/guide.model');
 const User = require('../models/user.model');
+const nodemailer = require("nodemailer");
+const config = require('../config/config');
 
 const guideSchema = Joi.object({
     user: Joi.objectId().required(),
@@ -26,7 +28,8 @@ module.exports = {
     report,
     approve,
     remove,
-    getAll
+    getAll,
+    get
 }
 
 async function insert(guide) {
@@ -40,18 +43,21 @@ async function insert(guide) {
         };
     }
 
-    const user = await User.find({ "_id": guide.value.user });
-    if (user.length === 0) {
+    const user = await User.findOne({ "_id": guide.value.user });
+    if (!user) {
         throw {
             message: 'Error: User not found',
             data: guide.error
         };
     }
 
-    if (user[0].roles.indexOf("admin") == -1)
+    if (user.roles.indexOf("trusted") == -1 && user.roles.indexOf("roles") == -1)
         guide.value.awaitingApproval = true;
 
-    return await new Guide(guide.value).save();
+    const savedGuide = await new Guide(guide.value).save();
+    await notifyMe("Kushinada - New Guide", savedGuide.id);
+
+    return savedGuide;
 }
 
 async function like(body) {
@@ -111,6 +117,8 @@ async function report(body) {
             guide.reports.push(body.userId);
             await guide.save();
             success = true;
+
+            await notifyMe("Kushinada - New Report", guide.id);
         }
 
         return { success };
@@ -191,4 +199,45 @@ async function getAll(body) {
         find = {};
 
     return await Guide.find(find).sort(sort).limit(50).populate('user');
+}
+
+async function get(id) {
+    return await Guide.find({ '_id': id });
+}
+
+async function notifyMe(event, guideId) {
+    if (config.mailUser && config.mailPass) {
+        const admin = await User.findOne({ "roles": "admin" });
+
+        if (!admin)
+            return;
+
+        const link = config.siteUrl + "/admin?id=" + guideId;
+
+        const transporter = nodemailer.createTransport({
+            service: "Gmail",
+            auth: {
+                user: config.mailUser,
+                pass: config.mailPass
+            }
+        });
+
+        transporter.sendMail({
+            from: '"Kushinada" <kushinada.web@gmail.com>',
+            to: admin.email,
+            subject: event,
+            text: "Follow the link: " + link,
+            html: "Follow the link: <br><a href=" + link + ">" + link + "</a>",
+        }, function (error, response) {
+            if (error) {
+                console.log('Error sending notification email: ' + error);
+                res.json({ error });
+            } else {
+                if (response.accepted.length > 0)
+                    res.json({ email: response.accepted[0] });
+                else
+                    res.json({ error: 'Email ' + user.email + ' did not accept the message.' });
+            }
+        });
+    }
 }

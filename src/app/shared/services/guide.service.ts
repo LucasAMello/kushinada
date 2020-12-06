@@ -17,6 +17,10 @@ export class GuideService {
         return this.http.post<Guide[]>('/api/guide/getAll', search);
     }
 
+    get(id): Observable<Guide[]> {
+        return this.http.get<Guide[]>('/api/guide/get?id=' + id);
+    }
+
     like(guideId, userId): Observable<any> {
         return this.http.post('/api/guide/like', { guideId, userId });
     }

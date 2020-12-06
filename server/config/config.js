@@ -26,6 +26,9 @@ const envVarsSchema = Joi.object({
         .default('mean'),
     MONGO_USER: Joi.string().optional(),
     MONGO_PASSWORD: Joi.string().optional(),
+    MAIL_USER: Joi.string().optional(),
+    MAIL_PASS: Joi.string().optional(),
+    SITE_URL: Joi.string().optional()
 }).unknown()
     .required();
 
@@ -46,7 +49,10 @@ const config = {
         dbname: envVars.MONGO_DBNAME,
         user: envVars.MONGO_USER,
         password: envVars.MONGO_PASSWORD
-    }
+    },
+    mailUser: envVars.MAIL_USER,
+    mailPass: envVars.MAIL_PASS,
+    siteUrl: envVars.SITE_URL
 };
 
 module.exports = config;
