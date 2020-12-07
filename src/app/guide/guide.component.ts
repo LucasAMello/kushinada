@@ -247,7 +247,12 @@ export class GuideComponent implements OnInit {
                 }
             });
 
+            while (assists.length < 6) {
+                assists.push(null);
+            }
+
             g.parsedTeamData = { team, assists, latents, badge: parsed.f[0][2] };
+            g.padDashFormation = encodeURIComponent(g.padDashFormation);
         }
     }
 
