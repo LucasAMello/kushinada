@@ -197,7 +197,7 @@ async function getAll(body) {
     if (find.$and.length == 0)
         find = {};
 
-    return await Guide.find(find).sort(sort).limit(50).populate('user');
+    return await Guide.find(find).sort(sort).limit(20).populate('user');
 }
 
 async function get(id) {
