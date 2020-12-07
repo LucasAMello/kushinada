@@ -252,7 +252,7 @@ export class GuideComponent implements OnInit {
             }
 
             g.parsedTeamData = { team, assists, latents, badge: parsed.f[0][2] };
-            g.padDashFormation = encodeURIComponent(g.padDashFormation);
+            g.padDashFormation = encodeURIComponent(g.padDashFormation).split('%2B').join('+');
         }
     }
 

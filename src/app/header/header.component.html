@@ -3,6 +3,7 @@
         <a class="links side" routerLink="/">Home</a>
         <a class="links side" routerLink="/guide">Guides</a>
         <a class="links side" routerLink="/submit">Submit</a>
+        <a class="links side" routerLink="/help">Help</a>
         <span class="example-spacer"></span>
         <a *ngIf="!user" class="links side" routerLink="/auth/login">Login</a>
         <a *ngIf="user" class="links side" [matMenuTriggerFor]="menu">

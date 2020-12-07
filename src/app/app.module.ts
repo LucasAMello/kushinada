@@ -14,6 +14,7 @@ import { HomeComponent } from './home/home.component';
 import { SubmitComponent } from './submit/submit.component';
 import { GuideModule } from './guide/guide.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HelpComponent } from './help/help.component';
 
 export function appInitializerFactory(authService: AuthService) {
     return () => authService.checkTheUserOnTheFirstLoad();
@@ -29,6 +30,7 @@ export function appInitializerFactory(authService: AuthService) {
     declarations: [
         AppComponent,
         HeaderComponent,
+        HelpComponent,
         HomeComponent,
         SubmitComponent
     ],

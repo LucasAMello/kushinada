@@ -5,11 +5,16 @@ import { AuthGuard } from './shared/guards';
 import { HomeComponent } from './home/home.component';
 import { GuideComponent } from './guide/guide.component';
 import { SubmitComponent } from './submit/submit.component';
+import { HelpComponent } from './help/help.component';
 
 const routes: Routes = [
     {
         path: '',
         component: HomeComponent,
+    },
+    {
+        path: 'help',
+        component: HelpComponent,
     },
     {
         path: 'auth',
