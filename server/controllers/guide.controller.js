@@ -51,7 +51,9 @@ async function insert(guide) {
         };
     }
 
-    guide.value.awaitingApproval = user.roles.indexOf("trusted") == -1 && user.roles.indexOf("roles") == -1;
+    // Disabling this for now, will enable if needed
+    // guide.value.awaitingApproval = user.roles.indexOf("trusted") == -1 && user.roles.indexOf("roles") == -1;
+    guide.value.awaitingApproval = false;
 
     const savedGuide = await new Guide(guide.value).save();
     await notifyMe("Kushinada - New Guide", savedGuide.id);

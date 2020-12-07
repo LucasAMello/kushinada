@@ -35,7 +35,10 @@ export class GuideComponent implements OnInit {
 
     displayReport = false;
     guideReportId: any;
-    reportOptions = [{ label: 'Not PaD related', value: 'notPad' }, { label: 'Offensive', value: 'offensive' }];
+    reportOptions = [
+        { label: 'Not PaD related', value: 'notPad' },
+        { label: 'Duplicated', value: 'duplicated' },
+        { label: 'Offensive', value: 'offensive' }];
     reportReason: any;
 
     constructor(private formBuilder: FormBuilder, private guideService: GuideService, private authService: AuthService,
