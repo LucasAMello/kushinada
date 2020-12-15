@@ -79,8 +79,8 @@ export class SubmitComponent implements OnInit {
 
         this.submitForm.patchValue({
             padDashFormation: JSON.stringify(json),
-            title: json.t.replaceAll('+', ' '),
-            description: json.d.replaceAll('+', ' '),
+            title: json.t ? json.t.replaceAll('+', ' ') : '',
+            description: json.d ? json.d.replaceAll('+', ' ') : '',
             badge: json.f[0].length > 2 ? json.f[0][2] : null,
             leaderId: this.cardNames[json.f[0][0][0][0]],
             sub1Id: json.f[0][0][1] ? this.cardNames[json.f[0][0][1][0]] : null,
