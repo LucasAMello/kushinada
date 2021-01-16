@@ -32,6 +32,7 @@ a {
 }
 
 .container {
+    min-height: calc(100vh - 48px);
     width: 820px;
     margin: 0 auto;
     overflow: auto;
