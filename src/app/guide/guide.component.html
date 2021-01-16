@@ -27,8 +27,7 @@
                         <div class="p-col-1 label">Leader</div>
                         <div class="p-col-5">
                             <p-autoComplete field="label" [minLength]="2" formControlName="leader" [suggestions]="suggestions"
-                                [autoHighlight]="true" [forceSelection]="true" (completeMethod)="searchCard($event)"
-                                (keydown.enter)="search()" (onSelect)=search()></p-autoComplete>
+                                [autoHighlight]="true" [forceSelection]="true" (completeMethod)="searchCard($event)" (onSelect)=search()></p-autoComplete>
                         </div>
                         <div class="p-col-1 label">Order</div>
                         <div class="p-col-5">

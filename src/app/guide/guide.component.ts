@@ -55,7 +55,14 @@ export class GuideComponent implements OnInit {
             withFormation: new FormControl(false)
         });
 
-        this.cardNames = cardData.map(d => ({ label: `#${d[0]} - ${d[1]}`, name: d[1], value: d[0] }));
+        const transformDict = {};
+        cardData.forEach(d => {
+            if (d[5]) {
+                transformDict[d[0]] = d[5];
+                transformDict[d[5]] = d[0];
+            }
+        });
+        this.cardNames = cardData.map(d => ({ label: `#${d[0]} - ${d[1]}`, name: d[1], value: d[0], transform: transformDict[d[0]] }));
 
         this.route.queryParams.subscribe(params => {
             this.showMine = params['showMine'] === 'true';
@@ -200,6 +207,7 @@ export class GuideComponent implements OnInit {
             const formValues = this.searchForm.value;
             const search: any = {
                 leaderId: formValues.leader ? formValues.leader.value : null,
+                transformId: formValues.leader ? formValues.leader.transform : null,
                 title: formValues.title,
                 withVideo: formValues.withVideo ? formValues.withVideo.length > 0 : false,
                 withFormation: formValues.withFormation ? formValues.withFormation.length > 0 : false,
@@ -270,6 +278,10 @@ export class GuideComponent implements OnInit {
         results.push(...this.cardNames.filter(c => regularExpression.test(c.label.toLowerCase())).map(c => ({ data: c, level: 1000 })));
 
         this.suggestions = [...new Set(results.sort((a, b) => a.level - b.level).map(d => d.data))];
+    }
+
+    onEnter(event) {
+        console.log(event);
     }
 
 }

@@ -176,8 +176,14 @@ async function getAll(body) {
     if (body.title)
         find.$and.push({ 'title': { '$regex': escapeStringRegexp(body.title), '$options' : 'i' } });
 
-    if (body.leaderId)
-        find.$and.push({ $or: [{ 'leaderId': body.leaderId }, { 'helperId': body.leaderId }] });
+    if (body.leaderId) {
+        if (body.transformId) {
+            find.$and.push({ $or: [{ 'leaderId': body.leaderId }, { 'helperId': body.leaderId },
+                { 'leaderId': body.transformId }, { 'helperId': body.transformId } ] });
+        } else {
+            find.$and.push({ $or: [{ 'leaderId': body.leaderId }, { 'helperId': body.leaderId }] });
+        }
+    }
 
     if (body.withVideo)
         find.$and.push({ 'videoId': { '$nin': [null, ''] } });
