@@ -16,7 +16,8 @@ const badges = [
     { id: 14, name: 'EXP+' },
     { id: 15, name: 'Blind Resist' },
     { id: 16, name: 'Jammer Resist' },
-    { id: 17, name: 'Poison Resist' }
+    { id: 17, name: 'Poison Resist' },
+    { id: 18, name: 'Pad Pass' }
 ];
 
 export default badges;
