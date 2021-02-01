@@ -4,7 +4,9 @@
         <form *ngIf="submitForm" [formGroup]="submitForm" (ngSubmit)="submit()">
             <div class="form p-fluid">
                 <div class="p-field p-grid">
-                    <div class="p-col-3 label">PAD Dash Formation</div>
+                    <div class="p-col-3 label">
+                        <a href="https://mapaler.github.io/PADDashFormation/solo.html" target="_blank">PAD Dash Formation</a>
+                    </div>
                     <div class="p-col-9">
                         <input pInputText type="text" formControlName="padDashFormation" class="p-inputtext p-component"
                             (input)="readPadDashFormation($event.target.value)">
