@@ -58,9 +58,11 @@
             <div *ngFor="let guide of guides" class="guide">
                 <div *ngIf="admin" class="action-buttons">
                     <button *ngIf="guide.awaitingApproval" type="button" pButton icon="pi pi-check" label="Approve" (click)="approve(guide._id)"></button>
+                    <button type="button" pButton icon="pi pi-pencil" label="Edit" (click)="edit(guide)"></button>
                     <button type="button" pButton icon="pi pi-trash" label="Delete" (click)="delete(guide)"></button>
                 </div>
                 <div *ngIf="showMine" class="action-buttons">
+                    <button type="button" pButton icon="pi pi-pencil" label="Edit" (click)="edit(guide)"></button>
                     <button type="button" pButton icon="pi pi-trash" label="Delete" (click)="delete(guide)"></button>
                 </div>
                 <h2 class="title">{{ guide.title }}</h2>

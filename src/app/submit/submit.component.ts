@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import badges from '@app/data/badges';
 import { User } from '@app/shared/interfaces';
 import { AuthService, GuideService } from '@app/shared/services';
@@ -24,8 +25,10 @@ export class SubmitComponent implements OnInit {
 
     suggestions = [];
 
+    guideId: any;
+
     constructor(private formBuilder: FormBuilder, private guideService: GuideService, private authService: AuthService,
-        private snackBar: MatSnackBar) { }
+        private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router) { }
 
     ngOnInit() {
         this.authService.getUser().subscribe(user => this.user = user);
@@ -46,6 +49,27 @@ export class SubmitComponent implements OnInit {
             helperId: new FormControl(null, [Validators.required]),
             description: new FormControl(null),
             badge: new FormControl(0)
+        });
+
+        this.route.queryParams.subscribe(params => {
+            if (params['id']) {
+                this.guideId = params['id'];
+
+                this.guideService.get(this.guideId).subscribe((res: any[]) => {
+                    if (res.length > 0 && (this.user.roles.indexOf('admin') >= 0 || this.user._id === res[0].user)) {
+                        res[0].leaderId = this.cardNames.find(c => c.value === res[0].leaderId);
+                        res[0].sub1Id = this.cardNames.find(c => c.value === res[0].sub1Id);
+                        res[0].sub2Id = this.cardNames.find(c => c.value === res[0].sub2Id);
+                        res[0].sub3Id = this.cardNames.find(c => c.value === res[0].sub3Id);
+                        res[0].sub4Id = this.cardNames.find(c => c.value === res[0].sub4Id);
+                        res[0].helperId = this.cardNames.find(c => c.value === res[0].helperId);
+                        this.submitForm.patchValue(res[0]);
+                    } else {
+                        this.guideId = undefined;
+                        this.router.navigateByUrl('/submit');
+                    }
+                });
+            }
         });
     }
 
@@ -116,6 +140,7 @@ export class SubmitComponent implements OnInit {
 
         const formValue = this.submitForm.getRawValue();
         const guide = {
+            guideId: this.guideId,
             title: formValue.title,
             videoId: formValue.videoId,
             padDashFormation: formValue.padDashFormation,
@@ -130,7 +155,7 @@ export class SubmitComponent implements OnInit {
             user: this.user._id
         };
 
-        this.guideService.submit(guide).subscribe(data => {
+        this.guideService.submit(guide).subscribe(_ => {
             this.snackBar.open('Submitted', 'Close', {
                 duration: 10000,
                 verticalPosition: 'top'

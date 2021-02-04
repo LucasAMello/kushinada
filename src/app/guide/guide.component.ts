@@ -6,7 +6,7 @@ import { AuthService, GuideService } from '@app/shared/services';
 import { User } from '@app/shared/interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-guide',
@@ -42,7 +42,7 @@ export class GuideComponent implements OnInit {
     reportReason: any;
 
     constructor(private formBuilder: FormBuilder, private guideService: GuideService, private authService: AuthService,
-            private snackBar: MatSnackBar, private route: ActivatedRoute) { }
+            private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router) { }
 
     ngOnInit() {
         this.authService.getUser().subscribe(user => this.user = user);
@@ -173,6 +173,10 @@ export class GuideComponent implements OnInit {
                 }
             });
         }
+    }
+
+    edit(guide) {
+        this.router.navigateByUrl('/submit?id=' + guide._id.toString());
     }
 
     getLatentStyle(l) {

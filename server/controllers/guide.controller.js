@@ -7,6 +7,7 @@ const nodemailer = require("nodemailer");
 const config = require('../config/config');
 
 const guideSchema = Joi.object({
+    guideId: Joi.objectId().optional(),
     user: Joi.objectId().required(),
     title: Joi.string().required(),
     videoId: Joi.string().allow('', null).optional(),
@@ -23,6 +24,7 @@ const guideSchema = Joi.object({
 
 module.exports = {
     insert,
+    edit,
     like,
     dislike,
     report,
@@ -31,6 +33,8 @@ module.exports = {
     getAll,
     get
 }
+
+const requireApproval = false;
 
 async function insert(guide) {
     guide = await guideSchema.validate(guide, { abortEarly: false });
@@ -51,14 +55,66 @@ async function insert(guide) {
         };
     }
 
-    // Disabling this for now, will enable if needed
-    // guide.value.awaitingApproval = user.roles.indexOf("trusted") == -1 && user.roles.indexOf("roles") == -1;
-    guide.value.awaitingApproval = false;
+    if (requireApproval) {
+        guide.value.awaitingApproval = user.roles.indexOf("trusted") == -1 && user.roles.indexOf("roles") == -1;
+    } else {
+        guide.value.awaitingApproval = false;
+    }
 
     const savedGuide = await new Guide(guide.value).save();
     await notifyMe("Kushinada - New Guide", savedGuide.id);
 
     return savedGuide;
+}
+
+async function edit(body, user) {
+    const guide = await Guide.findById(body.guideId);
+
+    if (guide) {
+        if (user.roles.indexOf("admin") !== -1 || guide.user._id.toString() === user._id.toString()) {
+            body = await guideSchema.validate(body, { abortEarly: false });
+
+            if (body.error) {
+                console.error(body.error);
+                throw {
+                    message: 'Invalid request',
+                    data: body.error
+                };
+            }
+
+            if (requireApproval) {
+                guide.awaitingApproval = user.roles.indexOf("trusted") == -1 && user.roles.indexOf("roles") == -1;
+            } else {
+                guide.awaitingApproval = false;
+            }
+
+            body = body.value;
+            guide.title = body.title;
+            guide.videoId = body.videoId;
+            guide.padDashFormation = body.padDashFormation;
+            guide.leaderId = body.leaderId;
+            guide.sub1Id = body.sub1Id;
+            guide.sub2Id = body.sub2Id;
+            guide.sub3Id = body.sub3Id;
+            guide.sub4Id = body.sub4Id;
+            guide.helperId = body.helperId;
+            guide.description = body.description;
+            guide.badge = body.badge;
+
+            const savedGuide = await guide.save();
+            await notifyMe("Kushinada - Guide Edited", savedGuide.id);
+
+            return savedGuide;
+        } else {
+            throw {
+                message: 'Unauthorized'
+            };
+        }
+    } else {
+        throw {
+            message: 'Guide not found'
+        };
+    }
 }
 
 async function like(body) {
@@ -174,12 +230,14 @@ async function getAll(body) {
     let find = { $and: [] };
 
     if (body.title)
-        find.$and.push({ 'title': { '$regex': escapeStringRegexp(body.title), '$options' : 'i' } });
+        find.$and.push({ 'title': { '$regex': escapeStringRegexp(body.title), '$options': 'i' } });
 
     if (body.leaderId) {
         if (body.transformId) {
-            find.$and.push({ $or: [{ 'leaderId': body.leaderId }, { 'helperId': body.leaderId },
-                { 'leaderId': body.transformId }, { 'helperId': body.transformId } ] });
+            find.$and.push({
+                $or: [{ 'leaderId': body.leaderId }, { 'helperId': body.leaderId },
+                { 'leaderId': body.transformId }, { 'helperId': body.transformId }]
+            });
         } else {
             find.$and.push({ $or: [{ 'leaderId': body.leaderId }, { 'helperId': body.leaderId }] });
         }
@@ -193,7 +251,7 @@ async function getAll(body) {
 
     if (body.awaitingApproval !== undefined) {
         if (body.user) {
-            find.$and.push({ $or: [{'awaitingApproval': body.awaitingApproval }, { 'user': body.user }] });
+            find.$and.push({ $or: [{ 'awaitingApproval': body.awaitingApproval }, { 'user': body.user }] });
         } else {
             find.$and.push({ 'awaitingApproval': body.awaitingApproval });
         }
