@@ -25,6 +25,19 @@ a {
     background-position-y: -25px;
 }
 
+.no-property {
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    background-image: url(/assets/images/CARDFRAMEW.PNG);
+
+    width: 25px;
+    height: 25px;
+    background-size: 32px;
+}
+
 .property, .subproperty {
     background-repeat: no-repeat;
     position: absolute;

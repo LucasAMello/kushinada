@@ -2,7 +2,8 @@
     [style.backgroundImage]="'url(/assets/images/CARDS_' + card.picId + '.PNG)'"
     [style.backgroundPosition]="card.picX + 'px ' + card.picY + 'px'"
     [href]="'http://www.puzzledragonx.com/en/monster.asp?n=' + card.id">
-    <div class="property" [style.backgroundPositionX]="card.attr * -102 + 'px'"></div>
+    <div *ngIf="card.attr == 6" class="no-property"></div>
+    <div *ngIf="card.attr != 6" class="property" [style.backgroundPositionX]="card.attr * -102 + 'px'"></div>
     <div class="subproperty" [style.backgroundPositionX]="card.subAttr * -102 + 'px'"></div>
     <div *ngIf="card.superAwoken != undefined" class="super-awoken">
         <div class="awoken-icon" [style.backgroundPositionY]="card.superAwoken * -32 + 'px'"></div>
