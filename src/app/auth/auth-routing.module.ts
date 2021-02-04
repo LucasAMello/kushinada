@@ -1,4 +1,5 @@
 import { Routes, RouterModule } from '@angular/router';
+import { ForgotComponent } from './forgot/forgot.component';
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -19,6 +20,10 @@ const routes: Routes = [
             {
                 path: 'register',
                 component: RegisterComponent,
+            },
+            {
+                path: 'forgot',
+                component: ForgotComponent,
             },
         ],
     },

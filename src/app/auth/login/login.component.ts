@@ -33,17 +33,47 @@ export class LoginComponent implements OnInit {
                 });
 
                 this.router.navigate(['.'], { relativeTo: this.route });
+            } else if (params.reseted) {
+                this.snackBar.open('Password reset', 'Close', {
+                    duration: 10000,
+                });
+
+                this.router.navigate(['.'], { relativeTo: this.route });
             }
         });
     }
 
     login(): void {
-        this.authService.login(this.email!, this.password!).subscribe(() => {
-            this.router.navigateByUrl('/');
-        }, _ => {
-            this.snackBar.open('Email and Password don\'t match', 'Close', {
+        if (!this.email) {
+            this.snackBar.open('Email is required', 'Close', {
                 duration: 10000,
             });
-        });
+        } else if (!this.password) {
+            this.snackBar.open('Password is required', 'Close', {
+                duration: 10000,
+            });
+        } else {
+            this.authService.login(this.email!, this.password!).subscribe(() => {
+                this.router.navigateByUrl('/');
+            }, _ => {
+                this.snackBar.open('Email and Password don\'t match', 'Close', {
+                    duration: 10000,
+                });
+            });
+        }
+    }
+
+    forgot(): void {
+        if (!this.email) {
+            this.snackBar.open('Email is required', 'Close', {
+                duration: 10000,
+            });
+        } else {
+            this.authService.forgot(this.email).subscribe(() => {
+                this.snackBar.open('Password reset email sent', 'Close', {
+                    duration: 10000,
+                });
+            });
+        }
     }
 }

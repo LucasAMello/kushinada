@@ -12,6 +12,8 @@ const userSchema = Joi.object({
 
 module.exports = {
     insert,
+    forgotPassword,
+    resetPassword,
     verify
 }
 
@@ -72,4 +74,70 @@ async function verify(validationCode) {
     user.valid = true;
 
     return await new User(user).save();
+}
+
+async function forgotPassword(email) {
+    const find = { 'email': email };
+    const users = await User.find(find);
+
+    if (users.length == 0) {
+        throw {
+            message: 'Error: user not found'
+        };
+    }
+
+    const user = users[0];
+    user.resetCode = uuidv4();
+
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+    user.resetValid = date;
+
+    return await new User(user).save();
+}
+
+async function resetPassword(body) {
+    const find = { 'resetCode': body.resetCode };
+    const users = await User.find(find);
+
+    if (users.length == 0) {
+        throw {
+            message: 'Error: user not found'
+        };
+    }
+
+    const user = users[0];
+    if (user.resetValid < new Date()) {
+        throw {
+            message: 'Reset expired'
+        };
+    }
+
+    const userObj = {
+        username: user.username,
+        email: user.email,
+        password: body.password,
+        repeatPassword: body.repeatPassword,
+    };
+
+    const validate = await userSchema.validate(userObj, { abortEarly: false });
+
+    if (validate.error) {
+        console.error(validate.error);
+        if (validate.error.stack.indexOf('fails to match the required pattern') === -1)
+            throw {
+                message: 'Invalid request',
+                data: validate.error
+            };
+        else
+            throw {
+                message: 'Password must contain 8 or more characters'
+            };
+    }
+
+    user.hashedPassword = bcrypt.hashSync(body.password, 10);
+    delete user.password;
+    user.resetCode = user.resetValid = null;
+
+    return await user.save();
 }

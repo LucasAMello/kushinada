@@ -34,7 +34,13 @@ const UserSchema = new mongoose.Schema({
     },
     roles: [{
         type: String,
-    }]
+    }],
+    resetCode: {
+        type: String,
+    },
+    resetValid: {
+        type: Date,
+    },
 }, {
     versionKey: false
 });

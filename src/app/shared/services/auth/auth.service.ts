@@ -15,6 +15,7 @@ interface AuthResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+
     private user$ = new BehaviorSubject<User | null>(null);
 
     constructor(private http: HttpClient, private tokenStorage: TokenStorage) { }
@@ -29,6 +30,14 @@ export class AuthService {
                 }),
                 pluck('user')
             );
+    }
+
+    forgot(email: string): Observable<any> {
+        return this.http.post<AuthResponse>('/api/auth/forgot', { email });
+    }
+
+    reset(resetCode: string, password: any, repeatPassword: any) {
+        return this.http.post<AuthResponse>('/api/auth/resetPassword', { resetCode, password, repeatPassword });
     }
 
     register(username: string, email: string, password: string, repeatPassword: string): Observable<any> {
