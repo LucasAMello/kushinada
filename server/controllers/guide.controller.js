@@ -10,6 +10,7 @@ const guideSchema = Joi.object({
     guideId: Joi.objectId().optional(),
     user: Joi.objectId().required(),
     title: Joi.string().required(),
+    dungeonId: Joi.string().allow('', null).optional(),
     videoId: Joi.string().allow('', null).optional(),
     leaderId: Joi.number().integer().positive().required(),
     sub1Id: Joi.number().integer().positive(),
@@ -90,6 +91,7 @@ async function edit(body, user) {
 
             body = body.value;
             guide.title = body.title;
+            guide.dungeonId = body.dungeonId;
             guide.videoId = body.videoId;
             guide.padDashFormation = body.padDashFormation;
             guide.leaderId = body.leaderId;
@@ -241,6 +243,10 @@ async function getAll(body) {
         } else {
             find.$and.push({ $or: [{ 'leaderId': body.leaderId }, { 'helperId': body.leaderId }] });
         }
+    }
+
+    if (body.dungeonId) {
+        find.$and.push({ 'dungeonId': body.dungeonId });
     }
 
     if (body.withVideo)

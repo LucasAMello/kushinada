@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const GuideSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     title: { type: String, required: true },
+    dungeonId: { type: String },
     videoId: { type: String },
     leaderId: { type: Number, required: true },
     sub1Id: { type: Number },

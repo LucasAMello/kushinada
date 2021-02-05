@@ -25,13 +25,20 @@
                 <ng-container *ngIf="advancedSearch">
                     <div class="p-field p-grid">
                         <div class="p-col-1 label">Leader</div>
-                        <div class="p-col-5">
+                        <div class="p-col-7">
                             <p-autoComplete field="label" [minLength]="2" formControlName="leader" [suggestions]="suggestions"
                                 [autoHighlight]="true" [forceSelection]="true" (completeMethod)="searchCard($event)" (onSelect)=search()></p-autoComplete>
                         </div>
                         <div class="p-col-1 label">Order</div>
-                        <div class="p-col-5">
+                        <div class="p-col-3">
                             <p-dropdown [options]="orderOptions" formControlName="order" (onChange)="search()" appendTo="body"></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="p-field p-grid">
+                        <div class="p-col-1 label" style="font-size: 15px;">Dungeon</div>
+                        <div class="p-col-11">
+                            <p-autoComplete field="label" [minLength]="2" formControlName="dungeon" [suggestions]="dungeonSuggestions"
+                                [autoHighlight]="true" [forceSelection]="true" (completeMethod)="searchDungeon($event)" (onSelect)=search()></p-autoComplete>
                         </div>
                     </div>
                     <div class="p-field p-grid">
@@ -51,6 +58,11 @@
                 </ng-container>
             </div>
         </form>
+        <ng-container *ngIf="!guides">
+            <div style="margin-top: 50px; text-align: center;">
+                <i class="pi pi-spin pi-spinner" style="font-size: 4rem"></i>
+            </div>
+        </ng-container>
         <ng-container *ngIf="guides">
             <div *ngIf="guides.length == 0" style="margin-top: 50px; text-align: center;">
                 No results...  :(
@@ -58,7 +70,7 @@
             <div *ngFor="let guide of guides" class="guide">
                 <div *ngIf="admin" class="action-buttons">
                     <button *ngIf="guide.awaitingApproval" type="button" pButton icon="pi pi-check" label="Approve" (click)="approve(guide._id)"></button>
-                    <button type="button" pButton icon="pi pi-pencil" label="Edit" (click)="edit(guide)"></button>
+                    <button type="button" pButton icon="pi pi-pencil" label="Edit" (click)="edit(guide, $event)"></button>
                     <button type="button" pButton icon="pi pi-trash" label="Delete" (click)="delete(guide)"></button>
                 </div>
                 <div *ngIf="showMine" class="action-buttons">

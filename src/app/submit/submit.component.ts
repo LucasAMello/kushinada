@@ -20,12 +20,13 @@ export class SubmitComponent implements OnInit {
     submitForm: FormGroup;
 
     cardNames: any[];
-    dungeons: any[];
+    dungeonNames: any[];
     badges: any[];
 
     suggestions = [];
 
     guideId: any;
+    dungeonSuggestions: any;
 
     constructor(private formBuilder: FormBuilder, private guideService: GuideService, private authService: AuthService,
         private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router) { }
@@ -34,11 +35,12 @@ export class SubmitComponent implements OnInit {
         this.authService.getUser().subscribe(user => this.user = user);
 
         this.cardNames = cardData.map(d => ({ label: `#${d[0]} - ${d[1]}`, name: d[1], value: d[0] }));
-        this.dungeons = dungeonData.map(d => ({ label: d.name, value: d.id }));
+        this.dungeonNames = dungeonData.map(d => ({ label: d.name, value: d.id }));
         this.badges = badges.map(d => ({ label: d.name, value: d.id }));
 
         this.submitForm = this.formBuilder.group({
             title: new FormControl(null, [Validators.required]),
+            dungeonId: new FormControl(null),
             videoId: new FormControl(null),
             padDashFormation: new FormControl(null),
             leaderId: new FormControl(null, [Validators.required]),
@@ -57,6 +59,7 @@ export class SubmitComponent implements OnInit {
 
                 this.guideService.get(this.guideId).subscribe((res: any[]) => {
                     if (res.length > 0 && (this.user.roles.indexOf('admin') >= 0 || this.user._id === res[0].user)) {
+                        res[0].dungeonId = this.dungeonNames.find(c => c.value === res[0].dungeonId);
                         res[0].leaderId = this.cardNames.find(c => c.value === res[0].leaderId);
                         res[0].sub1Id = this.cardNames.find(c => c.value === res[0].sub1Id);
                         res[0].sub2Id = this.cardNames.find(c => c.value === res[0].sub2Id);
@@ -129,8 +132,26 @@ export class SubmitComponent implements OnInit {
     }
 
     searchDungeon(event) {
+        const query = event.query.toLowerCase();
         const regularExpression = new RegExp(event.query.toLowerCase().split(' ').join('.*'), 'i');
-        this.suggestions = this.dungeons.filter(c => regularExpression.test(c.label.toLowerCase()));
+
+        if (query.indexOf('shura') !== -1) {
+            const aliases = [
+                { label: 'Illusory World of Carnage-No Continues - Guardian of the Demon Gate', alias: 'shura realm 1', value: '4400-1' },
+                { label: 'Illusory World of Carnage-No Continues - Ruler of Hell\'s Halls-No Dupes', alias: 'shura realm 2', value: '4400-2' },
+                { label: 'Alt. Illusory World of Carnage-No Continues - Alt. Guardian of the Demon Gate', alias: 'alt. shura realm 1', value: '4401-1' },
+            ];
+
+            this.dungeonSuggestions = [...aliases.filter(c => regularExpression.test(c.alias.toLowerCase()))];
+        } else {
+            const results = [];
+            results.push(...this.dungeonNames.filter(c => c.label.toLowerCase() === query).map(c => ({ data: c, level: 0 })));
+            results.push(...this.dungeonNames.filter(c => c.value + '' === query).map(c => ({ data: c, level: 0 })));
+            results.push(...this.dungeonNames.filter(c => c.label.toLowerCase().indexOf(query) >= 0).map(c => ({ data: c, level: c.label.toLowerCase().indexOf(query) })));
+            results.push(...this.dungeonNames.filter(c => regularExpression.test(c.label.toLowerCase())).map(c => ({ data: c, level: 1000 })));
+
+            this.dungeonSuggestions = [...new Set(results.sort((a, b) => a.level - b.level).map(d => d.data))];
+        }
     }
 
     submit() {
@@ -142,6 +163,7 @@ export class SubmitComponent implements OnInit {
         const guide = {
             guideId: this.guideId,
             title: formValue.title,
+            dungeonId: formValue.dungeonId?.value,
             videoId: formValue.videoId,
             padDashFormation: formValue.padDashFormation,
             leaderId: formValue.leaderId.value,
@@ -160,6 +182,9 @@ export class SubmitComponent implements OnInit {
                 duration: 10000,
                 verticalPosition: 'top'
             });
+
+            this.guideId = undefined;
+            this.router.navigateByUrl('/submit');
 
             this.submitForm.reset();
         });

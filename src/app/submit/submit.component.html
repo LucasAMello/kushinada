@@ -16,8 +16,13 @@
                     <div class="p-col-3 label">Title *</div>
                     <div class="p-col-9">
                         <input pInputText type="text" formControlName="title" class="p-inputtext p-component">
-                        <!-- <p-autoComplete field="label" [minLength]="2" formControlName="dungeon" [suggestions]="suggestions"
-                            (completeMethod)="searchDungeon($event)"></p-autoComplete> -->
+                    </div>
+                </div>
+                <div class="p-field p-grid">
+                    <div class="p-col-3 label">Dungeon</div>
+                    <div class="p-col-9">
+                        <p-autoComplete field="label" [minLength]="2" formControlName="dungeonId" [suggestions]="dungeonSuggestions"
+                            [autoHighlight]="true" [forceSelection]="true" (completeMethod)="searchDungeon($event)"></p-autoComplete>
                     </div>
                 </div>
                 <div class="p-field p-grid">

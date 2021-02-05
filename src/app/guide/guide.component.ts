@@ -29,6 +29,7 @@ export class GuideComponent implements OnInit {
 
     searchForm: FormGroup;
     cardNames: any[];
+    dungeonNames: any[];
     advancedSearch = false;
     suggestions: any;
     orderOptions = [{ label: 'Most Recent', value: 'recent' }, { label: 'Most Likes', value: 'likes' }];
@@ -41,6 +42,8 @@ export class GuideComponent implements OnInit {
         { label: 'Offensive', value: 'offensive' }];
     reportReason: any;
 
+    dungeonSuggestions: any[];
+
     constructor(private formBuilder: FormBuilder, private guideService: GuideService, private authService: AuthService,
             private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router) { }
 
@@ -51,6 +54,7 @@ export class GuideComponent implements OnInit {
             title: new FormControl(null),
             leader: new FormControl(null),
             order: new FormControl('recent'),
+            dungeon: new FormControl(null),
             withVideo: new FormControl(false),
             withFormation: new FormControl(false)
         });
@@ -64,8 +68,13 @@ export class GuideComponent implements OnInit {
         });
         this.cardNames = cardData.map(d => ({ label: `#${d[0]} - ${d[1]}`, name: d[1], value: d[0], transform: transformDict[d[0]] }));
 
+        this.dungeonNames = dungeonData.map(d => ({ label: d.name, value: d.id }));
+
         this.route.queryParams.subscribe(params => {
             this.showMine = params['showMine'] === 'true';
+            this.searchForm.reset();
+            this.searchForm.get('order').setValue('recent')
+            this.advancedSearch = false;
             this.search(this.guideId);
         });
     }
@@ -175,8 +184,12 @@ export class GuideComponent implements OnInit {
         }
     }
 
-    edit(guide) {
-        this.router.navigateByUrl('/submit?id=' + guide._id.toString());
+    edit(guide, event) {
+        if (event.ctrlKey) {
+            window.open('/submit?id=' + guide._id.toString());
+        } else {
+            this.router.navigateByUrl('/submit?id=' + guide._id.toString());
+        }
     }
 
     getLatentStyle(l) {
@@ -210,6 +223,7 @@ export class GuideComponent implements OnInit {
         } else {
             const formValues = this.searchForm.value;
             const search: any = {
+                dungeonId: formValues.dungeon ? formValues.dungeon.value : null,
                 leaderId: formValues.leader ? formValues.leader.value : null,
                 transformId: formValues.leader ? formValues.leader.transform : null,
                 title: formValues.title,
@@ -223,6 +237,7 @@ export class GuideComponent implements OnInit {
                 search.awaitingApproval = false;
             }
 
+            this.guides = null;
             this.guideService.getAll(search).subscribe(res => {
                 this.guides = res;
                 this.guides.forEach(g => this.parseGuide(g));
@@ -284,8 +299,27 @@ export class GuideComponent implements OnInit {
         this.suggestions = [...new Set(results.sort((a, b) => a.level - b.level).map(d => d.data))];
     }
 
-    onEnter(event) {
-        console.log(event);
+    searchDungeon(event) {
+        const query = event.query.toLowerCase();
+        const regularExpression = new RegExp(event.query.toLowerCase().split(' ').join('.*'), 'i');
+
+        if (query.indexOf('shura') !== -1) {
+            const aliases = [
+                { label: 'Illusory World of Carnage-No Continues - Guardian of the Demon Gate', alias: 'shura realm 1', value: '4400-1' },
+                { label: 'Illusory World of Carnage-No Continues - Ruler of Hell\'s Halls-No Dupes', alias: 'shura realm 2', value: '4400-2' },
+                { label: 'Alt. Illusory World of Carnage-No Continues - Alt. Guardian of the Demon Gate', alias: 'alt. shura realm 1', value: '4401-1' },
+            ];
+
+            this.dungeonSuggestions = [...aliases.filter(c => regularExpression.test(c.alias.toLowerCase()))];
+        } else {
+            const results = [];
+            results.push(...this.dungeonNames.filter(c => c.label.toLowerCase() === query).map(c => ({ data: c, level: 0 })));
+            results.push(...this.dungeonNames.filter(c => c.value + '' === query).map(c => ({ data: c, level: 0 })));
+            results.push(...this.dungeonNames.filter(c => c.label.toLowerCase().indexOf(query) >= 0).map(c => ({ data: c, level: c.label.toLowerCase().indexOf(query) })));
+            results.push(...this.dungeonNames.filter(c => regularExpression.test(c.label.toLowerCase())).map(c => ({ data: c, level: 1000 })));
+
+            this.dungeonSuggestions = [...new Set(results.sort((a, b) => a.level - b.level).map(d => d.data))];
+        }
     }
 
 }
