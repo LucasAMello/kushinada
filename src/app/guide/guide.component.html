@@ -74,7 +74,7 @@
                     <button type="button" pButton icon="pi pi-trash" label="Delete" (click)="delete(guide)"></button>
                 </div>
                 <div *ngIf="showMine" class="action-buttons">
-                    <button type="button" pButton icon="pi pi-pencil" label="Edit" (click)="edit(guide)"></button>
+                    <button type="button" pButton icon="pi pi-pencil" label="Edit" (click)="edit(guide, $event)"></button>
                     <button type="button" pButton icon="pi pi-trash" label="Delete" (click)="delete(guide)"></button>
                 </div>
                 <h2 class="title">{{ guide.title }}</h2>
