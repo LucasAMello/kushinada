@@ -43,6 +43,7 @@ export class GuideComponent implements OnInit {
     reportReason: any;
 
     dungeonSuggestions: any[];
+    skipQuery = false;
 
     constructor(private formBuilder: FormBuilder, private guideService: GuideService, private authService: AuthService,
             private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router) { }
@@ -71,11 +72,33 @@ export class GuideComponent implements OnInit {
         this.dungeonNames = dungeonData.map(d => ({ label: d.name, value: d.id }));
 
         this.route.queryParams.subscribe(params => {
-            this.showMine = params['showMine'] === 'true';
-            this.searchForm.reset();
-            this.searchForm.get('order').setValue('recent')
-            this.advancedSearch = false;
-            this.search(this.guideId);
+            if (this.skipQuery) {
+                this.skipQuery = false;
+            } else {
+                this.searchForm.reset();
+                this.searchForm.get('order').setValue('recent');
+                this.advancedSearch = false;
+
+                if (params['showMine']) {
+                    this.showMine = params['showMine'] === 'true';
+                }
+
+                if (params['title']) {
+                    this.searchForm.get('title').setValue(params['title']);
+                }
+
+                if (params['leader']) {
+                    this.searchForm.get('leader').setValue(this.cardNames.find(c => c.value === +params['leader']));
+                    this.advancedSearch = true;
+                }
+
+                if (params['dungeon']) {
+                    this.searchForm.get('dungeon').setValue(this.dungeonNames.find(d => d.value === params['dungeon']));
+                    this.advancedSearch = true;
+                }
+
+                this.search(this.guideId);
+            }
         });
     }
 
@@ -232,6 +255,22 @@ export class GuideComponent implements OnInit {
                 order: formValues.order,
                 showMine: this.showMine
             };
+
+            const queryParams: any = { title: formValues.title };
+            if (formValues.dungeon) {
+                queryParams.dungeon = formValues.dungeon.value;
+            }
+
+            if (formValues.leader) {
+                queryParams.leader = formValues.leader.value;
+            }
+
+            this.router.navigate([], {
+                queryParams,
+                queryParamsHandling: 'merge',
+            });
+
+            this.skipQuery = true;
 
             if (!this.admin) {
                 search.awaitingApproval = false;
