@@ -286,7 +286,7 @@ export class GuideComponent implements OnInit {
 
     parseGuide(g) {
         g.showMore = false;
-        g.createdAt = new Date(g.createdAt).toLocaleString('en-GB', { timeZone: 'UTC' });
+        g.createdAt = new Date(g.createdAt).toLocaleString('en-GB');
 
         if (g.padDashFormation) {
             const parsed = JSON.parse(g.padDashFormation);

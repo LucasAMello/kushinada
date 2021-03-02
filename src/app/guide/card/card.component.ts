@@ -18,7 +18,7 @@ export class CardComponent implements OnInit {
 
     ngOnInit() {
         const card = cardData[this.cardId] as any[];
-        const p = Math.ceil((card[0] - 1) / 100.0);
+        const p = Math.ceil(card[0] / 100.0);
         const x = Math.floor((card[0] - 1) % 10);
         const y = Math.floor(((card[0] - 1) % 100) / 10.0);
 
