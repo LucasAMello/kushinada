@@ -77,7 +77,9 @@
                     <button type="button" pButton icon="pi pi-pencil" label="Edit" (click)="edit(guide, $event)"></button>
                     <button type="button" pButton icon="pi pi-trash" label="Delete" (click)="delete(guide)"></button>
                 </div>
-                <h2 class="title">{{ guide.title }}</h2>
+                <h2 class="title" [title]="guide.title">
+                    {{ guide.title }}
+                </h2>
                 <div class="video">
                     <div *ngIf="guide.videoId" class="youtube-player">
                         <iframe [src]="'https://www.youtube.com/embed/' + guide.videoId | safe" frameborder="0" allowfullscreen="1"></iframe>
