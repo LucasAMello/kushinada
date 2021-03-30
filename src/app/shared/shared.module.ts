@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -49,6 +50,7 @@ import { DialogModule } from 'primeng/dialog';
         MatExpansionModule,
         MatFormFieldModule,
         MatProgressBarModule,
+        MatProgressSpinnerModule,
         HttpClientModule,
         DropdownModule,
         AutoCompleteModule,
