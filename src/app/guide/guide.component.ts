@@ -347,7 +347,7 @@ export class GuideComponent implements OnInit {
                 { label: 'Illusory World of Carnage-No Continues - Guardian of the Demon Gate', alias: 'shura realm 1', value: '4400-1' },
                 { label: 'Illusory World of Carnage-No Continues - Ruler of Hell\'s Halls-No Dupes', alias: 'shura realm 2', value: '4400-2' },
                 { label: 'Alt. Illusory World of Carnage-No Continues - Alt. Guardian of the Demon Gate', alias: 'alt. shura realm 1', value: '4401-1' },
-                { label: 'Alt. Illusory World of Carnage-No Continues - Alt. Guardian of the Demon Gate', alias: 'alt. shura realm 2', value: '4401-2' },
+                { label: 'Alt. Illusory World of Carnage-No Continues - Alt. Ruler of Hell\'s Halls-No Dupes', alias: 'alt. shura realm 2', value: '4401-2' },
             ];
 
             this.dungeonSuggestions = [...aliases.filter(c => regularExpression.test(c.alias.toLowerCase()))];
