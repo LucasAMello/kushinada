@@ -4,6 +4,8 @@
     "license": "MIT",
     "scripts": {
         "ng": "ng",
+        "serve": "node server",
+        "start": "node server",
         "debug": "concurrently -c \"yellow.bold,green.bold\" -n \"SERVER,BUILD\" \"nodemon --inspect server\" \"ng build --watch\"",
         "build": "ng build --prod",
         "test": "ng test",
