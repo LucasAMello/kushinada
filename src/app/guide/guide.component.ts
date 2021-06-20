@@ -14,7 +14,6 @@ import { ActivatedRoute, Router } from '@angular/router';
     styleUrls: ['./guide.component.scss']
 })
 export class GuideComponent implements OnInit {
-
     @Input() admin = false;
     @Input() guideId = '';
 
@@ -220,9 +219,9 @@ export class GuideComponent implements OnInit {
             backgroundPositionY: l * -32 + 'px'
         };
 
-        if ([12, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36].indexOf(l) !== -1) {
+        if ([12, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 43, 44, 45].indexOf(l) !== -1) {
             style.width = '70px';
-        } else if ([13, 14, 15, 37, 38, 39, 40, 41].indexOf(l) !== -1) {
+        } else if ([13, 14, 15, 37, 38, 39, 40, 41, 42].indexOf(l) !== -1) {
             style.width = '146px';
             style.marginLeft = '-50px';
             style.marginRight = '47px';
@@ -234,7 +233,7 @@ export class GuideComponent implements OnInit {
     }
 
     isSixSlot(l) {
-        return [13, 14, 15, 37, 38, 39, 40, 41].indexOf(l) !== -1;
+        return [13, 14, 15, 37, 38, 39, 40, 41, 42].indexOf(l) !== -1;
     }
 
     search(id?) {
@@ -361,5 +360,4 @@ export class GuideComponent implements OnInit {
             this.dungeonSuggestions = [...new Set(results.sort((a, b) => a.level - b.level).map(d => d.data))];
         }
     }
-
 }
