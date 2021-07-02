@@ -232,8 +232,14 @@ export class GuideComponent implements OnInit {
         return style;
     }
 
-    isSixSlot(l) {
-        return [13, 14, 15, 37, 38, 39, 40, 41, 42].indexOf(l) !== -1;
+    getLatentSize(l) {
+        if ([12, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 43, 44, 45].indexOf(l) !== -1) {
+            return 2;
+        } else if ([13, 14, 15, 37, 38, 39, 40, 41, 42].indexOf(l) !== -1) {
+            return 6;
+        } else {
+            return 1;
+        }
     }
 
     search(id?) {
@@ -297,7 +303,7 @@ export class GuideComponent implements OnInit {
                     const x = Math.floor((t[0] - 1) % 10);
                     const y = Math.floor(((t[0] - 1) % 100) / 10.0);
                     team.push(cardData[t[0]].concat(t[5], p, x, y));
-                    latents.push(t[4]);
+                    latents.push(t[4] ? t[4].sort((a, b) => this.getLatentSize(b) - this.getLatentSize(a)) : t[4]);
                 } else {
                     team.push(null);
                     latents.push(null);

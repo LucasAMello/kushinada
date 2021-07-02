@@ -163,7 +163,7 @@
                                     <ul class="latent-ul">
                                         <ng-container *ngFor="let l of latent">
                                             <li class="latent-icon"><span [ngStyle]="getLatentStyle(l)"></span></li>
-                                            <li *ngIf="isSixSlot(l)" class="latent-icon display-none"><span></span></li>
+                                            <li *ngIf="getLatentSize(l) == 6" class="latent-icon display-none"><span></span></li>
                                         </ng-container>
                                     </ul>
                                 </li>
