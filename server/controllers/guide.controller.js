@@ -236,10 +236,9 @@ async function getAll(body) {
 
     if (body.leaderId) {
         if (body.transformId) {
-            find.$and.push({
-                $or: [{ 'leaderId': body.leaderId }, { 'helperId': body.leaderId },
-                { 'leaderId': body.transformId }, { 'helperId': body.transformId }]
-            });
+            const arr = [ { 'leaderId': body.leaderId }, { 'helperId': body.leaderId } ];
+            body.transformId.forEach(id => arr.push({ 'leaderId': id }, { 'helperId': id }))
+            find.$and.push({ $or: arr });
         } else {
             find.$and.push({ $or: [{ 'leaderId': body.leaderId }, { 'helperId': body.leaderId }] });
         }

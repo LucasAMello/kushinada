@@ -62,8 +62,18 @@ export class GuideComponent implements OnInit {
         const transformDict = {};
         cardData.forEach(d => {
             if (d[5]) {
-                transformDict[d[0]] = d[5];
-                transformDict[d[5]] = d[0];
+                if (transformDict[d[5]]) {
+                    transformDict[d[5]].push(d[0]);
+                } else {
+                    transformDict[d[5]] = [d[0]];
+                }
+
+                if (transformDict[d[0]]) {
+                    transformDict[d[5]].push(...transformDict[d[0]]);
+                    transformDict[d[0]].push(d[5]);
+                } else {
+                    transformDict[d[0]] = [d[5]];
+                }
             }
         });
         this.cardNames = cardData.map(d => ({ label: `#${d[0]} - ${d[1]}`, name: d[1], value: d[0], transform: transformDict[d[0]] }));
@@ -351,6 +361,7 @@ export class GuideComponent implements OnInit {
             const aliases = [
                 { label: 'Illusory World of Carnage-No Continues - Guardian of the Demon Gate', alias: 'shura realm 1', value: '4400-1' },
                 { label: 'Illusory World of Carnage-No Continues - Ruler of Hell\'s Halls-No Dupes', alias: 'shura realm 2', value: '4400-2' },
+                { label: 'Illusory World of Carnage-No Continues - Stellar Stage of the Supreme-All Att. Req.', alias: 'shura realm 3', value: '4400-3' },
                 { label: 'Alt. Illusory World of Carnage-No Continues - Alt. Guardian of the Demon Gate', alias: 'alt. shura realm 1', value: '4401-1' },
                 { label: 'Alt. Illusory World of Carnage-No Continues - Alt. Ruler of Hell\'s Halls-No Dupes', alias: 'alt. shura realm 2', value: '4401-2' },
             ];
