@@ -18,7 +18,8 @@ const GuideSchema = new mongoose.Schema({
     description: { type: String },
     padDashFormation: { type: String },
     awaitingApproval: { type: Boolean },
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    version: { type: Number, default: 1 }
 }, {
     versionKey: false
 });

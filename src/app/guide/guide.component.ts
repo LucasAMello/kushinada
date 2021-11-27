@@ -303,6 +303,11 @@ export class GuideComponent implements OnInit {
         g.showMore = false;
         g.createdAt = new Date(g.createdAt).toLocaleString('en-GB');
 
+        const version = g.version ? g.version : 1;
+        if (g.version < 2) {
+            g.badge = this.convertBadge(g.badge);
+        }
+
         if (g.padDashFormation) {
             const parsed = JSON.parse(g.padDashFormation);
             const team = [];
@@ -335,7 +340,7 @@ export class GuideComponent implements OnInit {
                 assists.push(null);
             }
 
-            g.parsedTeamData = { team, assists, latents, badge: parsed.f[0][2] };
+            g.parsedTeamData = { team, assists, latents, badge: parsed.v > 3 ? parsed.f[0][2] : this.convertBadge(parsed.f[0][2]) };
             g.padDashFormation = encodeURIComponent(g.padDashFormation).split('%2B').join('+');
         }
     }
@@ -376,5 +381,52 @@ export class GuideComponent implements OnInit {
 
             this.dungeonSuggestions = [...new Set(results.sort((a, b) => a.level - b.level).map(d => d.data))];
         }
+    }
+
+    findBadge(badgeId) {
+        const badge = this.badges.find(b => b.id === badgeId);
+        return badge ? badge.name : '';
+    }
+
+    convertBadge(badge: number) {
+        switch (badge) {
+            case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: {
+                return badge + 1;
+            }
+
+            case 9: {
+                return 11;
+            }
+
+            case 10: case 11: case 12: {
+                return badge + 7;
+            }
+
+            case 13: {
+                return 21;
+            }
+
+            case 14: {
+                return 10;
+            }
+
+            case 15: case 16: case 17: {
+                return badge - 3;
+            }
+
+            case 18: {
+                return 50;
+            }
+
+            default: return 1;
+        }
+    }
+
+    getBackgroundPositionX(badge: number) {
+        return (badge === 50 ? -36 : 0) + 'px';
+    }
+
+    getBackgroundPositionY(badge: number) {
+        return (badge ? badge : 0) * -30 + 'px';
     }
 }

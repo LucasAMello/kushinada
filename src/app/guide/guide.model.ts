@@ -15,4 +15,5 @@ export interface Guide {
     description: string;
     padDashFormation: string;
     createdAt: string;
+    version: number;
 }

@@ -14,7 +14,6 @@ import dungeonData from '../data/dungeonData';
     styleUrls: ['./submit.component.scss']
 })
 export class SubmitComponent implements OnInit {
-
     user: User;
 
     submitForm: FormGroup;
@@ -104,11 +103,13 @@ export class SubmitComponent implements OnInit {
             return false;
         }
 
+        const version = json.v;
+
         this.submitForm.patchValue({
             padDashFormation: JSON.stringify(json),
             title: json.t ? json.t.replaceAll('+', ' ') : '',
             description: json.d ? json.d.replaceAll('+', ' ') : '',
-            badge: json.f[0].length > 2 ? json.f[0][2] : null,
+            badge: json.f[0].length > 2 ? (version > 3 ? json.f[0][2] : this.convertBadge(json.f[0][2])) : null,
             leaderId: this.cardNames[json.f[0][0][0][0]],
             sub1Id: json.f[0][0][1] ? this.cardNames[json.f[0][0][1][0]] : null,
             sub2Id: json.f[0][0][2] ? this.cardNames[json.f[0][0][2][0]] : null,
@@ -139,6 +140,7 @@ export class SubmitComponent implements OnInit {
             const aliases = [
                 { label: 'Illusory World of Carnage-No Continues - Guardian of the Demon Gate', alias: 'shura realm 1', value: '4400-1' },
                 { label: 'Illusory World of Carnage-No Continues - Ruler of Hell\'s Halls-No Dupes', alias: 'shura realm 2', value: '4400-2' },
+                { label: 'Illusory World of Carnage-No Continues - Stellar Stage of the Supreme-All Att. Req.', alias: 'shura realm 3', value: '4400-3' },
                 { label: 'Alt. Illusory World of Carnage-No Continues - Alt. Guardian of the Demon Gate', alias: 'alt. shura realm 1', value: '4401-1' },
                 { label: 'Alt. Illusory World of Carnage-No Continues - Alt. Ruler of Hell\'s Halls-No Dupes', alias: 'alt. shura realm 2', value: '4401-2' },
             ];
@@ -175,7 +177,8 @@ export class SubmitComponent implements OnInit {
             helperId: formValue.helperId.value,
             description: formValue.description,
             badge: formValue.badge,
-            user: this.user._id
+            user: this.user._id,
+            version: 2
         };
 
         this.guideService.submit(guide).subscribe(_ => {
@@ -189,5 +192,39 @@ export class SubmitComponent implements OnInit {
 
             this.submitForm.reset();
         });
+    }
+
+    convertBadge(badge: number) {
+        switch (badge) {
+            case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8: {
+                return badge + 1;
+            }
+
+            case 9: {
+                return 11;
+            }
+
+            case 10: case 11: case 12: {
+                return badge + 7;
+            }
+
+            case 13: {
+                return 21;
+            }
+
+            case 14: {
+                return 10;
+            }
+
+            case 15: case 16: case 17: {
+                return badge - 3;
+            }
+
+            case 18: {
+                return 50;
+            }
+
+            default: return 1;
+        }
     }
 }

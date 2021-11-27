@@ -102,7 +102,7 @@
                         <li class="data-card"><app-card-small [cardId]="guide.helperId"></app-card-small></li>
                     </ul>
                     <ul style="margin-top: 20px;">
-                        <li><strong>Team Badge:</strong> {{ badges[guide.badge ? guide.badge : 0].name }}</li>
+                        <li><strong>Team Badge:</strong> {{ findBadge(guide.badge) }}</li>
                     </ul>
                 </div>
                 <span *ngIf="guide.user" class="credits">Submitted by {{ guide.user.username }} on {{ guide.createdAt }}</span>
@@ -143,7 +143,8 @@
                     <div *ngIf="guide.parsedTeamData" class="paddash">
                         <div class="team-badge">
                             <div class="badge">
-                                <span [style.backgroundPositionY]="(guide.parsedTeamData.badge ? guide.parsedTeamData.badge : 0) * -30 + 'px'"></span>
+                                <span [style.backgroundPositionX]="getBackgroundPositionX(guide.parsedTeamData.badge)"
+                                    [style.backgroundPositionY]="getBackgroundPositionY(guide.parsedTeamData.badge)"></span>
                             </div>
                             <div class="pad-dash-link">
                                 <a [href]="'https://mapaler.github.io/PADDashFormation/solo.html?s=en&d=' + guide.padDashFormation" target="_blank">

@@ -20,7 +20,8 @@ const guideSchema = Joi.object({
     helperId: Joi.number().integer().positive().required(),
     badge: Joi.number().integer().allow(null).optional(),
     description: Joi.string().allow('', null).optional(),
-    padDashFormation: Joi.string().allow('', null).optional()
+    padDashFormation: Joi.string().allow('', null).optional(),
+    version: Joi.number().integer().positive(),
 });
 
 module.exports = {
