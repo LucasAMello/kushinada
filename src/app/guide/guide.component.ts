@@ -427,6 +427,6 @@ export class GuideComponent implements OnInit {
     }
 
     getBackgroundPositionY(badge: number) {
-        return (badge ? badge : 0) * -30 + 'px';
+        return (badge === 50 ? 0 : badge) * -30 + 'px';
     }
 }
