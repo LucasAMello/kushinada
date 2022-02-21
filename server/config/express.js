@@ -14,11 +14,21 @@ const passport = require('./passport');
 
 const app = express();
 
+// set up rate limiter: maximum of five requests per minute
+var RateLimit = require('express-rate-limit');
+var limiter = new RateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 5
+});
+
+// apply rate limiter to all requests
+app.use(limiter);
+
 if (config.env === 'development') {
     app.use(logger('dev'));
 }
 
-// Choose what fronten framework to serve the dist from
+// Choose what frontend framework to serve the dist from
 var distDir = '../../dist/';
 if (config.frontend == 'react') {
     distDir = '../../node_modules/material-dashboard-react/dist'
@@ -48,7 +58,6 @@ app.use(cors());
 
 app.use(passport.initialize());
 
-
 // API router
 app.use('/api/', routes);
 
@@ -60,7 +69,6 @@ app.use((req, res, next) => {
 
 // error handler, send stacktrace only during development
 app.use((err, req, res, next) => {
-
     // customize Joi validation errors
     if (err.isJoi) {
         err.message = err.details.map(e => e.message).join("; ");

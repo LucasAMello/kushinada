@@ -13,12 +13,14 @@ router.post('/getAll', function (req, res, next) {
         next(err);
     })(req, res, next);
 }, asyncHandler(getAll));
+
 router.get('/get', function (req, res, next) {
     passport.authenticate('jwt', { session: false }, function (err, user, info) {
         req.body.user = user;
         next(err);
     })(req, res, next);
 }, asyncHandler(get));
+
 router.post('/submit', passport.authenticate('jwt', { session: false }), asyncHandler(submit));
 router.post('/like', passport.authenticate('jwt', { session: false }), asyncHandler(like));
 router.post('/dislike', passport.authenticate('jwt', { session: false }), asyncHandler(dislike));
