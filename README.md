@@ -1,7 +1,7 @@
 # [Kushinada](https://kushinadahime.com/)
 
 <div align="center">
-<img src="https://pad-static.chesterip.cc/media/monster-large/2280.webp" onerror="this.onerror=null; this.src='https://pad-static.chesterip.cc/media/monster-large/2280.png'">
+    <img src="/src/assets/images/kushinada.png">
 </div>
 <div align="center">
     <strong>Collection of clear guides for the game Puzzle and Dragons</strong>
