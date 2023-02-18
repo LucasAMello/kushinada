@@ -18,11 +18,10 @@ const app = express();
 var RateLimit = require('express-rate-limit');
 var limiter = RateLimit({
     windowMs: 1 * 60 * 1000, // 1 minute
-    max: 50
+    max: 50,
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
-
-// apply rate limiter to all requests
-app.use(limiter);
 
 if (config.env === 'development') {
     app.use(logger('dev'));
@@ -39,7 +38,7 @@ if (config.frontend == 'react') {
 app.use(express.static(path.join(__dirname, distDir)))
 app.use(/^((?!(api)).)*/, (req, res) => {
     res.sendFile(path.join(__dirname, distDir + '/index.html'));
-});
+}, limiter);
 
 console.log(distDir);
 
@@ -59,7 +58,7 @@ app.use(cors());
 app.use(passport.initialize());
 
 // API router
-app.use('/api/', routes);
+app.use('/api/', routes, limiter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
