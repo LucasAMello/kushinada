@@ -4,91 +4,93 @@
         <form *ngIf="submitForm" [formGroup]="submitForm" (ngSubmit)="submit()">
             <div class="form p-fluid">
                 <div class="p-field p-grid">
-                    <div class="p-col-3 label">
+                    <div class="p-col-12 p-lg-3 label">
                         <a href="https://mapaler.github.io/PADDashFormation/solo.html" target="_blank">PAD Dash Formation</a>
                     </div>
-                    <div class="p-col-9">
+                    <div class="p-col-12 p-lg-9">
                         <input pInputText type="text" formControlName="padDashFormation" class="p-inputtext p-component"
                             (input)="readPadDashFormation($event.target.value)">
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <div class="p-col-3 label">Title *</div>
-                    <div class="p-col-9">
+                    <div class="p-col-12 p-lg-3 label">Title *</div>
+                    <div class="p-col-12 p-lg-9">
                         <input pInputText type="text" formControlName="title" class="p-inputtext p-component">
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <div class="p-col-3 label">Dungeon</div>
-                    <div class="p-col-9">
+                    <div class="p-col-12 p-lg-3 label">Dungeon</div>
+                    <div class="p-col-12 p-lg-9">
                         <p-autoComplete field="label" [minLength]="2" formControlName="dungeonId" [suggestions]="dungeonSuggestions"
                             [autoHighlight]="true" [forceSelection]="true" (completeMethod)="searchDungeon($event)"></p-autoComplete>
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <div class="p-col-3 label">YouTube Link</div>
-                    <div class="p-col-9">
+                    <div class="p-col-12 p-lg-3 label">YouTube Link</div>
+                    <div class="p-col-12 p-lg-9">
                         <input pInputText type="text" formControlName="videoId" class="p-inputtext p-component"
                             (input)="readYouTubeLink($event.target.value)">
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <div class="p-col-3 label">Leader *</div>
-                    <div class="p-col-9">
+                    <div class="p-col-12 p-lg-3 label">Leader *</div>
+                    <div class="p-col-12 p-lg-9">
                         <p-autoComplete field="label" [minLength]="2" formControlName="leaderId" [suggestions]="suggestions"
                             [autoHighlight]="true" [forceSelection]="true" (completeMethod)="searchCard($event)"></p-autoComplete>
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <div class="p-col-3 label">Sub #1</div>
-                    <div class="p-col-9">
+                    <div class="p-col-12 p-lg-3 label">Sub #1</div>
+                    <div class="p-col-12 p-lg-9">
                         <p-autoComplete field="label" [minLength]="2" formControlName="sub1Id" [suggestions]="suggestions"
                             [autoHighlight]="true" [forceSelection]="true" (completeMethod)="searchCard($event)"></p-autoComplete>
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <div class="p-col-3 label">Sub #2</div>
-                    <div class="p-col-9">
+                    <div class="p-col-12 p-lg-3 label">Sub #2</div>
+                    <div class="p-col-12 p-lg-9">
                         <p-autoComplete field="label" [minLength]="2" formControlName="sub2Id" [suggestions]="suggestions"
                             [autoHighlight]="true" [forceSelection]="true" (completeMethod)="searchCard($event)"></p-autoComplete>
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <div class="p-col-3 label">Sub #3</div>
-                    <div class="p-col-9">
+                    <div class="p-col-12 p-lg-3 label">Sub #3</div>
+                    <div class="p-col-12 p-lg-9">
                         <p-autoComplete field="label" [minLength]="2" formControlName="sub3Id" [suggestions]="suggestions"
                             [autoHighlight]="true" [forceSelection]="true" (completeMethod)="searchCard($event)"></p-autoComplete>
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <div class="p-col-3 label">Sub #4</div>
-                    <div class="p-col-9">
+                    <div class="p-col-12 p-lg-3 label">Sub #4</div>
+                    <div class="p-col-12 p-lg-9">
                         <p-autoComplete field="label" [minLength]="2" formControlName="sub4Id" [suggestions]="suggestions"
                             [autoHighlight]="true" [forceSelection]="true" (completeMethod)="searchCard($event)"></p-autoComplete>
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <div class="p-col-3 label">Helper *</div>
-                    <div class="p-col-9">
+                    <div class="p-col-12 p-lg-3 label">Helper *</div>
+                    <div class="p-col-12 p-lg-9">
                         <p-autoComplete field="label" [minLength]="2" formControlName="helperId" [suggestions]="suggestions"
                             [autoHighlight]="true" [forceSelection]="true" (completeMethod)="searchCard($event)"></p-autoComplete>
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <div class="p-col-3 label">Description</div>
-                    <div class="p-col-9">
+                    <div class="p-col-12 p-lg-3 label">Description</div>
+                    <div class="p-col-12 p-lg-9">
                         <textarea pInputTextarea formControlName="description" class="p-inputtextarea p-inputtext p-component"
                             rows="1" autoResize="autoResize"></textarea>
                     </div>
                 </div>
                 <div class="p-field p-grid">
-                    <div class="p-col-3 label">Team Badge</div>
-                    <div class="p-col-9">
+                    <div class="p-col-12 p-lg-3 label">Team Badge</div>
+                    <div class="p-col-12 p-lg-9">
                         <p-dropdown placeholder="Select" [options]="badges" formControlName="badge" appendTo="body"></p-dropdown>
                     </div>
                 </div>
             </div>
-            <button type="button" pButton icon="pi pi-check" type="submit" [disabled]="!submitForm.valid" label="Submit" style="float: right;"></button>
+            <div class="button-container">
+                <button type="button" pButton icon="pi pi-check" type="submit" [disabled]="!submitForm.valid" label="Submit"></button>
+            </div>
         </form>
     </div>
 </div>

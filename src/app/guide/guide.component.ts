@@ -44,6 +44,8 @@ export class GuideComponent implements OnInit {
     dungeonSuggestions: any[];
     skipQuery = false;
 
+    scaleValue = 1;
+
     constructor(private formBuilder: FormBuilder, private guideService: GuideService, private authService: AuthService,
             private snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router) { }
 
@@ -109,6 +111,14 @@ export class GuideComponent implements OnInit {
                 this.search(this.guideId);
             }
         });
+
+        // vp = padding / width
+        // if (window.visualViewport.width < 800) {
+        //     this.scaleValue = (window.visualViewport.width - 40) / 648;
+        // }
+        if (window.screen.width < 800) {
+            this.scaleValue = (window.screen.width - 40) / 648;
+        }
     }
 
     like(guide) {

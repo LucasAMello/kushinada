@@ -31,4 +31,16 @@ header {
     a {
         cursor: pointer;
     }
+
+    .full-toolbar {
+        @media screen and (max-width: 488px) {
+            display: none;
+        }
+    }
+
+    .hamburger-toolbar {
+        @media screen and (min-width: 488px) {
+            display: none;
+        }
+    }
 }

@@ -6,10 +6,11 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./help.component.scss']
 })
 export class HelpComponent implements OnInit {
-
-    constructor() { }
+    scaleValue = 1;
 
     ngOnInit() {
+        if (window.screen.width < 800) {
+            this.scaleValue = (window.screen.width - 40) / 648;
+        }
     }
-
 }

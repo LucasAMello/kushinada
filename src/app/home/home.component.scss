@@ -1,10 +1,15 @@
 .home-top {
     margin: 20px 0;
+    text-align: center;
 }
 
 .kushinada-image {
     height: 319px;
     width: 488px;
     margin: auto;
-    background-image: url("/assets/images/kushinada.png");
+
+    @media screen and (max-width: 488px) {
+        max-width: 100%;
+        height: auto;
+    }
 }

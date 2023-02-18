@@ -46,6 +46,7 @@ p {
 
     .p-field-checkbox {
         margin-bottom: 0;
+        height: 30px;
     }
 
     .p-dialog-content {
@@ -63,10 +64,13 @@ p {
 
 .guide {
     padding: 9px;
-    width: 800px;
     border: 1px solid white;
     margin-bottom: 20px;
     font-size: 14px;
+
+    @media screen and (min-width: 800px) {
+        width: 800px;
+    }
 
     .action-buttons {
         margin-bottom: 10px;
@@ -86,8 +90,12 @@ p {
     .video {
         display: inline-block;
         background-color: #000 !important;
-        min-width: 475px !important;
-        min-height: 267px !important;
+        width: 100%;
+
+        @media screen and (min-width: 800px) {
+            width: 475px !important;
+            height: 267px !important;
+        }
 
         .youtube-player {
             position: relative;
@@ -114,7 +122,11 @@ p {
         display: inline-block;
         margin-left: 10px;
         vertical-align: top;
-        width: 295px;
+        width: 100%;
+
+        @media screen and (min-width: 800px) {
+            width: 295px !important;
+        }
 
         .team-badge {
             text-overflow: ellipsis;
@@ -154,6 +166,12 @@ p {
     .credits {
         font-style: italic;
         margin-right: 20px;
+
+        @media screen and (max-width: 800px) {
+            display: block;
+            text-align: center;
+            margin: 16px;
+        }
     }
 
     .likes {
@@ -193,6 +211,10 @@ p {
         i {
             vertical-align: middle;
         }
+
+        @media screen and (max-width: 800px) {
+            margin-right: 0;
+        }
     }
 
     .description {
@@ -200,174 +222,178 @@ p {
         white-space: pre-line;
     }
 
-    .paddash {
-        margin: 10px auto;
-        width: 648px;
+    .paddash-container {
+        overflow: auto;
 
-        .team-badge {
-            margin: 0 4px;
-            display: inline-block;
-            width: 100%;
+        .paddash {
+            margin: 10px auto;
+            width: 648px;
 
-            .badge {
-                background-image: url(/assets/images/badge-bg.png);
-                width: 53px;
-                height: 41px;
-                line-height: 36px;
-                text-align: center;
-                margin-right: 5px;
-                float: left;
+            .team-badge {
+                margin: 0 4px;
+                display: inline-block;
+                width: 100%;
 
-                span {
+                .badge {
+                    background-image: url(/assets/images/badge-bg.png);
+                    width: 53px;
+                    height: 41px;
+                    line-height: 36px;
+                    text-align: center;
+                    margin-right: 5px;
+                    float: left;
+
+                    span {
+                        display: inline-block;
+                        vertical-align: middle;
+                        background-repeat: no-repeat;
+                        background-image: url(/assets/images/badge.png);
+                        width: 36px;
+                        height: 30px;
+                        margin-left: 1px;
+                        background-position-x: 0;
+                    }
+                }
+
+                .pad-dash-link {
                     display: inline-block;
-                    vertical-align: middle;
-                    background-repeat: no-repeat;
-                    background-image: url(/assets/images/badge.png);
-                    width: 36px;
-                    height: 30px;
-                    margin-left: 1px;
-                    background-position-x: 0;
+                    line-height: 40px;
+                    font-size: 24px;
+                    width: calc(100% - 60px);
+                    text-align: center;
                 }
             }
 
-            .pad-dash-link {
-                display: inline-block;
-                line-height: 40px;
-                font-size: 24px;
-                width: calc(100% - 60px);
-                text-align: center;
-            }
-        }
-
-        .team-box {
-            .team-assist {
-                display: inline-block;
-
-                .member {
+            .team-box {
+                .team-assist {
                     display: inline-block;
-                    position: relative;
-                    width: 108px;
-                    vertical-align: top;
 
-                    &::after {
-                        content: "▼Assist";
+                    .member {
                         display: inline-block;
-                        width: 108px;
-                        text-align: center;
-                        font-size: 18px;
-                        font-weight: bold;
                         position: relative;
-                        color: red;
-                    }
+                        width: 108px;
+                        vertical-align: top;
 
-                    &.null {
-                        .monster {
-                            box-sizing: border-box;
-                            background-image: none !important;
-                            background-color: rgba(230, 230, 230, 0.5);
-                            border: 3px grey dashed;
-                            margin: 4px;
-                            display: block;
-                            background-repeat: no-repeat;
+                        &::after {
+                            content: "▼Assist";
+                            display: inline-block;
+                            width: 108px;
+                            text-align: center;
+                            font-size: 18px;
+                            font-weight: bold;
                             position: relative;
-                            cursor: pointer;
-                            border-radius: 5px;
+                            color: red;
+                        }
 
-                            width: 100px;
-                            height: 100px;
+                        &.null {
+                            .monster {
+                                box-sizing: border-box;
+                                background-image: none !important;
+                                background-color: rgba(230, 230, 230, 0.5);
+                                border: 3px grey dashed;
+                                margin: 4px;
+                                display: block;
+                                background-repeat: no-repeat;
+                                position: relative;
+                                cursor: pointer;
+                                border-radius: 5px;
+
+                                width: 100px;
+                                height: 100px;
+                            }
                         }
                     }
                 }
-            }
 
-            .team-latents {
-                background-color: #444;
+                .team-latents {
+                    background-color: #444;
 
-                .latents {
-                    width: 108px;
-                    display: inline-block;
-                    vertical-align: top;
+                    .latents {
+                        width: 108px;
+                        display: inline-block;
+                        vertical-align: top;
 
-                    ul {
-                        font-size: 0;
-                        width: 152px;
-                        transform: scale(0.65);
-                        transform-origin: left top;
-                        margin-left: 5px;
-                        margin-bottom: calc(-64px * (1 - 0.65) + 1px);
-                        min-height: 47px;
+                        ul {
+                            font-size: 0;
+                            width: 152px;
+                            transform: scale(0.65);
+                            transform-origin: left top;
+                            margin-left: 5px;
+                            margin-bottom: calc(-64px * (1 - 0.65) + 1px);
+                            min-height: 47px;
 
-                        .latent-icon {
-                            margin-top: 3px;
-                            margin-left: 3px;
-                            margin-right: 3px;
+                            .latent-icon {
+                                margin-top: 3px;
+                                margin-left: 3px;
+                                margin-right: 3px;
 
-                            display: inline-block;
-                            border: 2px ridge rgba(82, 82, 60, 0.5);
-                            border-radius: 5px;
-                            box-sizing: border-box;
+                                display: inline-block;
+                                border: 2px ridge rgba(82, 82, 60, 0.5);
+                                border-radius: 5px;
+                                box-sizing: border-box;
 
-                            background: linear-gradient(#4499EE 33%, #2277EE 80%);
-                            border-color: #CCEEFF;
-                            box-shadow: black 1px 1px 1px;
+                                background: linear-gradient(#4499EE 33%, #2277EE 80%);
+                                border-color: #CCEEFF;
+                                box-shadow: black 1px 1px 1px;
 
-                            &.display-none {
-                                width: 73px !important;
-                                margin-right: 0 !important;
-                                display: inline-block !important;
-                                background: linear-gradient(#2277EE, #1155AA 80%) !important;
-                                border-color: #CCEEFF !important;
-                                box-shadow: black 1px 1px 1px !important;
-                                border-radius: 0 0 5px 5px !important;
-                                border-top: none !important;
-                                margin-top: 4px !important;
-                                transform: translatey(-4px) scaley(1.2) !important;
+                                &.display-none {
+                                    width: 73px !important;
+                                    margin-right: 0 !important;
+                                    display: inline-block !important;
+                                    background: linear-gradient(#2277EE, #1155AA 80%) !important;
+                                    border-color: #CCEEFF !important;
+                                    box-shadow: black 1px 1px 1px !important;
+                                    border-radius: 0 0 5px 5px !important;
+                                    border-top: none !important;
+                                    margin-top: 4px !important;
+                                    transform: translatey(-4px) scaley(1.2) !important;
+
+                                    span {
+                                        background: none;
+                                    }
+                                }
 
                                 span {
-                                    background: none;
+                                    content: "";
+                                    display: inline-block;
+                                    margin: -2px;
+                                    width: 32px;
+                                    height: 32px;
+                                    background-image: url(/assets/images/latent.png);
+                                    background-repeat: no-repeat;
+                                    background-position-x: 0;
                                 }
-                            }
-
-                            span {
-                                content: "";
-                                display: inline-block;
-                                margin: -2px;
-                                width: 32px;
-                                height: 32px;
-                                background-image: url(/assets/images/latent.png);
-                                background-repeat: no-repeat;
-                                background-position-x: 0;
                             }
                         }
                     }
                 }
-            }
 
-            .team-members {
-                display: inline-block;
-                background-color: #444;
-
-                .member {
+                .team-members {
                     display: inline-block;
-                    position: relative;
-                    width: 108px;
-                    vertical-align: top;
+                    background-color: #444;
 
-                    &.null {
-                        .monster {
-                            box-sizing: border-box;
-                            background-image: none !important;
-                            background-color: rgba(230, 230, 230, 0.5);
-                            border: 3px grey dashed;
-                            margin: 4px;
-                            display: block;
-                            background-repeat: no-repeat;
-                            position: relative;
-                            cursor: pointer;
-                            border-radius: 5px;
+                    .member {
+                        display: inline-block;
+                        position: relative;
+                        width: 108px;
+                        vertical-align: top;
 
-                            width: 100px;
-                            height: 100px;
+                        &.null {
+                            .monster {
+                                box-sizing: border-box;
+                                background-image: none !important;
+                                background-color: rgba(230, 230, 230, 0.5);
+                                border: 3px grey dashed;
+                                margin: 4px;
+                                display: block;
+                                background-repeat: no-repeat;
+                                position: relative;
+                                cursor: pointer;
+                                border-radius: 5px;
+
+                                width: 100px;
+                                height: 100px;
+                            }
                         }
                     }
                 }

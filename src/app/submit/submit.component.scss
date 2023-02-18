@@ -19,3 +19,11 @@
 .label {
     line-height: 30px;
 }
+
+.button-container {
+    text-align: right;
+
+    @media screen and (max-width: 488px) {
+        margin-top: 2rem;
+    }
+}

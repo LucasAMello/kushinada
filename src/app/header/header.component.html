@@ -1,15 +1,33 @@
 <header>
-    <mat-toolbar color="primary" style="height: 48px; min-width: 820px;">
-        <a class="links side" routerLink="/">Home</a>
-        <a class="links side" routerLink="/guide">Guides</a>
-        <a class="links side" routerLink="/submit">Submit</a>
-        <a class="links side" routerLink="/help">Help</a>
+    <mat-toolbar color="primary" style="height: 48px;">
+        <div class="full-toolbar">
+            <a class="links side" routerLink="/">Home</a>
+            <a class="links side" routerLink="/guide">Guides</a>
+            <a class="links side" routerLink="/submit">Submit</a>
+            <a class="links side" routerLink="/help">Help</a>
+        </div>
+
+        <div class="hamburger-toolbar">
+            <a class="links side" [matMenuTriggerFor]="hamburgerMenu">
+                <mat-icon style="line-height: 22px;">menu</mat-icon>
+                Menu
+            </a>
+        </div>
+
         <span class="example-spacer"></span>
         <a *ngIf="!user" class="links side" routerLink="/auth/login">Login</a>
         <a *ngIf="user" class="links side" [matMenuTriggerFor]="menu">
             <mat-icon style="line-height: 22px;">account_circle</mat-icon>
             {{ user.username }}
         </a>
+
+        <mat-menu #hamburgerMenu="matMenu" xPosition="before">
+            <button mat-menu-item routerLink="/">Home</button>
+            <button mat-menu-item routerLink="/guide">Guides</button>
+            <button mat-menu-item routerLink="/submit">Submit</button>
+            <button mat-menu-item routerLink="/help">Help</button>
+        </mat-menu>
+
         <mat-menu #menu="matMenu" xPosition="before">
             <button mat-menu-item *ngIf="user?.isAdmin" routerLink="/admin">Admin</button>
             <button mat-menu-item routerLink="/guide" [queryParams]="{ showMine: true }">Submissions</button>
