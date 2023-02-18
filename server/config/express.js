@@ -15,14 +15,14 @@ const passport = require('./passport');
 const app = express();
 
 // set up rate limiter: maximum of fifty requests per minute
-// var RateLimit = require('express-rate-limit');
-// var limiter = RateLimit({
-//     windowMs: 1 * 60 * 1000, // 1 minute
-//     max: 50
-// });
+var RateLimit = require('express-rate-limit');
+var limiter = RateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 50
+});
 
 // apply rate limiter to all requests
-// app.use(limiter);
+app.use(limiter);
 
 if (config.env === 'development') {
     app.use(logger('dev'));
