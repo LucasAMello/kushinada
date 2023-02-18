@@ -36,9 +36,9 @@ if (config.frontend == 'react') {
 }
 
 app.use(express.static(path.join(__dirname, distDir)))
-app.use(/^((?!(api)).)*/, (req, res) => {
+app.use(/^((?!(api)).)*/, limiter, (req, res) => {
     res.sendFile(path.join(__dirname, distDir + '/index.html'));
-}, limiter);
+});
 
 console.log(distDir);
 
@@ -58,7 +58,7 @@ app.use(cors());
 app.use(passport.initialize());
 
 // API router
-app.use('/api/', routes, limiter);
+app.use('/api/', limiter, routes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
