@@ -80,7 +80,13 @@
                 </h2>
                 <div class="video">
                     <div *ngIf="guide.videoId" class="youtube-player">
-                        <iframe [src]="'https://www.youtube.com/embed/' + guide.videoId | safe" frameborder="0" allowfullscreen="1"></iframe>
+                        <ng-container *ngIf="!guide.showVideo">
+                            <img [src]="'https://i3.ytimg.com/vi/' + guide.videoId + '/hqdefault.jpg'">
+                            <div class="play-button" (click)="guide.showVideo = true"></div>
+                        </ng-container>
+                        <ng-container *ngIf="guide.showVideo">
+                            <iframe [src]="'https://www.youtube.com/embed/' + guide.videoId + '?&autoplay=1' | safe" frameborder="0" allowfullscreen="1"></iframe>
+                        </ng-container>
                     </div>
                     <div *ngIf="!guide.videoId" class="youtube-player" style="text-align: center; line-height: 260px;">
                         No video

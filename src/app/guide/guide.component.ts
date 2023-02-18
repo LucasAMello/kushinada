@@ -310,6 +310,7 @@ export class GuideComponent implements OnInit {
     }
 
     parseGuide(g) {
+        g.showVideo = false;
         g.showMore = false;
         g.createdAt = new Date(g.createdAt).toLocaleString('en-GB');
 
